@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="SchMngt-Mapper">
+
+	<update id="insertSch" parameterType="schm">
+		insert
+		into
+		schdul_mngt(schdul_no,empno,schdul_code,schdul_sj,schdul_cn,rgsde,bgnde,endde,cnrs_at
+		,bg_color)
+		values
+		('schm'||sch_seq.nextval,#{empno}, #{schdul_code} ,#{schdul_sj},
+		#{schdul_cn},sysdate,#{bgnde},#{endde},#{cnrs_at},#{bg_color})
+	</update>
+
+	<update id="updateSch" parameterType="schm">
+		update
+		schdul_mngt
+		set
+		schdul_sj=#{schdul_sj}, 
+		schdul_cn=#{schdul_cn}, 
+		bgnde=#{bgnde},
+		endde=#{endde},
+		schdul_code=#{schdul_code},
+		bg_color=#{bg_color},
+		cnrs_at=#{cnrs_at}
+		where schdul_no=#{schdul_no}
+	</update>
+
+
+	<update id="deleteSch" parameterType="str">
+		delete
+		from schdul_mngt
+		where schdul_no=#{schdul_no}
+	</update>
+
+	<select id="schmList" resultType="schm">
+		select
+		*
+		from
+		schdul_mngt
+		where empno = #{empno}
+	</select>
+
+
+	<select id="selectSchmSeqNext" resultType="int">
+		select
+		sch_seq.nextval
+		as schdul_no from dual
+	</select>
+
+
+	<select id="selectSchBySchdul_no" parameterType="str"
+		resultType="schm">
+		select *
+		from schdul_mngt
+		where
+		schdul_no = #{schdul_no}
+	</select>
+
+</mapper>
+
+
+
+
+
+
+
+

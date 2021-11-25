@@ -1,0 +1,29 @@
+package kr.or.gw.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.gw.dto.NtcnVO;
+
+public class NtcnDAOImpl implements NtcnDAO {
+	private SqlSession session;
+
+	public void setSqlSession(SqlSession session) {
+		this.session = session;
+	}
+
+	@Override
+	public int countNtcnList(int empno) throws SQLException {
+		int ntcnCnt = session.selectOne("Ntcn-Mapper.countNtcnList", empno);
+		return ntcnCnt;
+	}
+
+	@Override
+	public List<NtcnVO> unCkedNtcnList(int empno) throws SQLException {
+		List<NtcnVO> ntcnList = session.selectList("Ntcn-Mapper.unCkedNtcnList", empno);
+		return ntcnList;
+	}
+
+}

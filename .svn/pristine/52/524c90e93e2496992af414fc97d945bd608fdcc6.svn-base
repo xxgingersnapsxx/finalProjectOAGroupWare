@@ -1,0 +1,5 @@
+package kr.or.gw.dao;
+
+public interface DclzVacDAO {
+	
+}

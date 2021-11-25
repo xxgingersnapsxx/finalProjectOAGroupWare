@@ -1,0 +1,60 @@
+package kr.or.gw.dto;
+
+
+/**
+ * @author 장하늘
+ * 즐겨찾기양식VO
+ */
+public class EccstBkmkFormVO {
+	
+	private String bkmk_no; //즐겨찾기번호
+	private int rgstr_empno; // 등록자사번
+	private int save_empno; // 저장된사번
+	private String form_no;
+	private int ln_no; //저장순서
+	private String bkmk_gr;//즐겨찾기그룹
+	
+	public String getBkmk_gr() {
+		return bkmk_gr;
+	}
+	public void setBkmk_gr(String bkmk_gr) {
+		this.bkmk_gr = bkmk_gr;
+	}
+	public int getLn_no() {
+		return ln_no;
+	}
+	public void setLn_no(int ln_no) {
+		this.ln_no = ln_no;
+	}
+	public String getBkmk_no() {
+		return bkmk_no;
+	}
+	public void setBkmk_no(String bkmk_no) {
+		this.bkmk_no = bkmk_no;
+	}
+	public int getRgstr_empno() {
+		return rgstr_empno;
+	}
+	public void setRgstr_empno(int rgstr_empno) {
+		this.rgstr_empno = rgstr_empno;
+	}
+	public int getSave_empno() {
+		return save_empno;
+	}
+	public void setSave_empno(int save_empno) {
+		this.save_empno = save_empno;
+	}
+	public String getForm_no() {
+		return form_no;
+	}
+	public void setForm_no(String form_no) {
+		this.form_no = form_no;
+	} //양식번호
+
+	
+	
+	
+	
+	
+
+}

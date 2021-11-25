@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mypage-Mapper">
+
+	<select id="selectCodeDcbyCodeNo" parameterType="str" resultType="str">
+		select code_dc
+		from code
+		where code_no = #{code_no}		
+	</select>
+
+	<select id="selectEmp" parameterType="int" resultType="emp">
+		select * 
+		from ORGNZT_EMP_MNGT
+		where empno=#{empno}
+	</select>
+
+	<select id="selectCheckInOutTime" parameterType="int" resultType="dclz">
+		select *
+		from dclz_mngt
+		where empno = #{empno}
+		and to_char(attend_time, 'yyyymmdd') = '20211025'	
+		<!-- and to_char(attend_time, 'yyyymmdd') = sysdate(attend_time, 'yyyymmdd') -->	
+	</select>
+
+	<update id="modifyEmp" parameterType="emp">
+		update orgnzt_emp_mngt 
+		set 
+		email_adres=#{email_adres},cttpc=#{cttpc}
+		where empno=#{empno}
+	</update>
+
+	<update id="pwModify" parameterType="emp">
+		update orgnzt_emp_mngt 
+		set 
+		password=#{password}
+		where empno=#{empno}
+	</update>
+</mapper>
+
+
+
+
+
+
+
+

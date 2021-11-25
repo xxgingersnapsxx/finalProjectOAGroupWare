@@ -1,0 +1,32 @@
+package kr.or.gw.command;
+
+import kr.or.gw.dto.OrgnztEmpMngtVO;
+
+public class MypageModifyCommand {
+	private String cttpc = ""; // 연락처
+	private String email_adres = ""; // 이메일주소
+
+	public String getCttpc() {
+		return cttpc;
+	}
+
+	public void setCttpc(String cttpc) {
+		this.cttpc = cttpc;
+	}
+
+	public String getEmail_adres() {
+		return email_adres;
+	}
+
+	public void setEmail_adres(String email_adres) {
+		this.email_adres = email_adres;
+	}
+
+	public OrgnztEmpMngtVO toOrgnztEmpMngtVO() {
+		OrgnztEmpMngtVO empVO = new OrgnztEmpMngtVO();
+		empVO.setCttpc(this.cttpc);
+		empVO.setEmail_adres(this.email_adres);
+
+		return empVO;
+	}
+}

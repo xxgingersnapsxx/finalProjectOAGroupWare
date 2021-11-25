@@ -1,0 +1,17 @@
+package kr.or.gw.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.gw.command.EscDbxCriteria;
+import kr.or.gw.dto.EccstSanctnMngtVO;
+
+public interface EscDbxDAO {
+	
+	List<EccstSanctnMngtVO> selectRdRcvList(EscDbxCriteria cri, int empno) throws SQLException;
+	int selectRdRcvListCount(EscDbxCriteria cri, int empno) throws SQLException;
+
+	List<EccstSanctnMngtVO> selectRdSendList(EscDbxCriteria cri, int empno) throws SQLException;
+	int selectRdSendListCount(EscDbxCriteria cri, int empno) throws SQLException;
+	
+}

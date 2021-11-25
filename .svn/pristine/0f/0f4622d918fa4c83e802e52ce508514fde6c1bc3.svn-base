@@ -1,0 +1,104 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.gw.command.PageMaker;
+import kr.or.gw.command.SearchCriteria;
+import kr.or.gw.command.basicCriteria;
+import kr.or.gw.command.basicPageMaker;
+import kr.or.gw.dao.DbxPublicDAO;
+import kr.or.gw.dto.DbxVO;
+
+public class DbxPublicServiceImpl implements DbxPublicService {
+
+
+	private DbxPublicDAO dbxPublicDAO;
+	public void setDbxPublicDAO(DbxPublicDAO dbxPublicDAO) {
+		this.dbxPublicDAO = dbxPublicDAO;
+		
+	}
+	
+	// 전체문서 조회
+	@Override
+	public Map<String, Object> getDbxAllList(basicCriteria cri) throws SQLException {
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+
+		// 현재 page 번호에 맞는 리스트를 perPageNum 개수 만큼 가져오기.
+		List<DbxVO> dbxAllList = dbxPublicDAO.selectDbxAllCriteria(cri);
+
+		// 전체 news 개수
+		int totalCount = dbxPublicDAO.selectDbxAllCriteriaTotalCount(cri);
+
+		// PageMaker 생성.
+		basicPageMaker pageMaker = new basicPageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(totalCount);
+
+		dataMap.put("dbxAllList", dbxAllList);
+		dataMap.put("pageMaker", pageMaker);
+
+		return dataMap;
+	}
+	
+	// 공유문서 조회
+	@Override
+	public Map<String, Object> getDbxList(basicCriteria cri) throws SQLException {
+
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+
+		// 현재 page 번호에 맞는 리스트를 perPageNum 개수 만큼 가져오기.
+		List<DbxVO> dbxList = dbxPublicDAO.selectDbxCriteria(cri);
+
+		// 전체 news 개수
+		int totalCount = dbxPublicDAO.selectDbxCriteriaTotalCount(cri);
+
+		// PageMaker 생성.
+		basicPageMaker pageMaker = new basicPageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(totalCount);
+
+		dataMap.put("dbxList", dbxList);
+		dataMap.put("pageMaker", pageMaker);
+
+		return dataMap;
+	}
+	
+	@Override
+	public DbxVO getDbxForModify(String dbx_no) throws SQLException {
+		DbxVO dbx = dbxPublicDAO.selectDbxByDbx_no(dbx_no);
+			return dbx;
+	}
+
+	@Override
+	public DbxVO getDbx(String dbx_no) throws SQLException {
+		DbxVO dbx = dbxPublicDAO.selectDbxByDbx_no(dbx_no);
+			return dbx;
+	}
+
+	@Override
+	public void regist(DbxVO dbx) throws SQLException {
+
+			String dbx_no = dbxPublicDAO.selectDbxSeqNext();
+			
+			dbx.setDbx_no(dbx_no);
+
+			dbxPublicDAO.insertDbx(dbx);
+	}
+
+	@Override
+	public void modify(DbxVO dbx) throws SQLException {
+
+		dbxPublicDAO.updateDbx(dbx);
+	}
+
+	@Override
+	public void remove(String dbx_no) throws SQLException {
+
+		dbxPublicDAO.deleteDbx(dbx_no);
+	}
+
+	
+}

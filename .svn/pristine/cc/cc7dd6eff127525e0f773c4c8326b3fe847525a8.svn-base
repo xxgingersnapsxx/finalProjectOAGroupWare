@@ -1,0 +1,105 @@
+<%@ page language="java" contentType="text/html; charset=EUC-KR"
+    pageEncoding="EUC-KR"%>
+<!DOCTYPE html>
+
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<style>
+.input-box {
+	margin-left: auto;
+	margin-right: auto;
+	font-family: 'Do Hyeon', sans-serif;
+	background: transparent;
+	border: none;
+	border-bottom: solid 1px #ccc;
+	padding: 20px 0px 5px 0px;
+	font-size: 14pt;
+	width: 70%;
+}
+
+.modal-password {
+	border:none;
+	border-right:0px; 
+	border-top:0px; 
+	boder-left:0px; 
+	boder-bottom:0px;
+	width: 257.78px;
+}
+
+
+
+#modal .title {
+	display: block;
+/*     padding-left: 10px; */
+	padding-top: 20px;
+	padding-bottom: 20px;
+	text-align: center;
+    text-shadow: 1px 1px 2px gray;
+   	color: black;
+}
+
+.btn-basic {
+  background: #004680;
+  color: white;
+  width: 90px;
+  padding: 6px;
+  border: 2px solid #004680;
+  border-radius: 0;
+  height: 34px;
+  font-size: 13px;
+  font-weight: bold;
+}
+</style>
+<body>
+
+
+<form id="pwForm" name="pwForm" action="approvalPassword" method="GET"> 
+ <input type="hidden" id="empno" name="empno" value="${loginUser.empno }">
+
+    <div id="modal" class="modal-overlay">
+        <div class="modal-PwWindow" id="modal-PwWindow">
+            <div class="title">
+                <h2>비밀번호 변경</h2>
+            </div>
+				<div class="input-box">
+					<input class="modal-password" id="password" type="password" name="sanctn_password"  placeholder="새 비밀번호">
+				</div>
+				<div class="input-box">
+					<input class="modal-password" id="verifyPassword" type="password" name="password2" placeholder="비밀번호 확인">
+				</div>
+				<div id="pwdWarn" style="color: red; height: 30px;"></div>
+        </div>
+   
+    </div>
+</form>
+					<button type="button" class="btn btn-basic" id="editBtn" style="margin-right: 10px;" onclick="pwSave();">변경</button>
+
+<script>
+	function pwSave(){
+		var form=document.pwForm;
+		if(${msg ne null}){
+			alert('${msg}');
+		};
+		
+			if($("#password").val() !== $("#verifyPassword").val()){
+				alert("비밀번호가 다릅니다.");
+				$("#password").val("").focus();
+				$("#verifyPassword").val("");
+				return false;
+			}else if ($("#password").val().length < 8) {
+				alert("비밀번호는 8자 이상으로 설정해야 합니다.");
+				$("#password").val("").focus();
+				return false;
+			}else if($.trim($("#password").val()) !== $("#password").val()){
+				alert("공백은 입력이 불가능합니다.");
+				return false;
+			}else{
+				alert("결재비밀번호 변경 성공");
+			}
+		form.submit();	
+	}
+</script>
+
+</body>

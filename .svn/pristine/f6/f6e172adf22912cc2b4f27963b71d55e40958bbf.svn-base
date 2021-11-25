@@ -1,0 +1,70 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" >
+<title>Insert title here</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+	href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&display=swap"
+	rel="stylesheet">
+<link rel="stylesheet"
+	href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/resources/bootstrap/plugins/fontawesome-free/css/all.min.css">
+<link rel="stylesheet"
+	href="<%=request.getContextPath()%>/resources/bootstrap/dist/css/adminlte.min.css">
+ <link rel="stylesheet" href="<%=request.getContextPath() %>/resources/css/common/commute.css">	
+ 
+ <style type="text/css">
+ body {
+	background: url(<%=request.getContextPath()%>/resources/css/common/img/loginForm.png)
+	no-repeat center center fixed;
+	-webkit-background-size: cover;
+	-moz-background-size: cover;
+	-o-background-size: cover;
+}
+ 
+ </style>
+</head>
+
+
+
+
+
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<c:if test="${from eq 'pwChange'}">
+	<script>
+		alert("${msg }");
+	</script>
+</c:if>
+<body>
+
+	<div style="width: 1280px; margin: 0 auto;">
+		<div class="wrapper">
+
+			<div class="row">
+				<section class="col-md-6">
+					<div class="pwlogin col-md-10">
+						<button  onclick="location.href='gowork'" id="button1" >출근</button>
+					</div>
+				</section>
+				<section class="col-md-6">
+					<div class="facelogin col-md-10">
+						<button onclick="location.href='gohome'" id="button2">퇴근</button>
+					</div>
+				</section>
+			</div>
+
+		</div>
+</div>
+</body>
+</html>
+
+
+

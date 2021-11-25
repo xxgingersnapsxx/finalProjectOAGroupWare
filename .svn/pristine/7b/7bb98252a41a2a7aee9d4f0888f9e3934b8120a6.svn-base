@@ -1,0 +1,20 @@
+package kr.or.gw.dao;
+
+import java.sql.SQLException;
+
+import org.apache.ibatis.session.SqlSession;
+
+public class MypageDAOImpl implements MypageDAO {
+	private SqlSession session;
+
+	public void setSqlSession(SqlSession session) {
+		this.session = session;
+	}
+
+	@Override
+	public String selectCodeDcbyCodeNo(String code_no) throws SQLException {
+		String code_dc = session.selectOne("Mypage-Mapper.selectCodeDcbyCodeNo", code_no);
+		return code_dc;
+	}
+
+}

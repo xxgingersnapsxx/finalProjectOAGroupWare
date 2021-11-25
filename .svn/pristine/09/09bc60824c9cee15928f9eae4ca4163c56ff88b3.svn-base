@@ -1,0 +1,36 @@
+package kr.or.gw.dto;
+
+
+/**
+ * @author 장하늘
+ * 즐겨찾기결재선 VO
+ */
+
+public class EccstBkmkSanctnLnVO {
+	
+	private String bkmk_no; //즐겨찾기번호
+	private int empno; //사번
+	private String bkmk_sanctner_info; //즐겨찾기결재선정보
+	
+	public String getBkmk_sanctner_info() {
+		return bkmk_sanctner_info;
+	}
+	public void setBkmk_sanctner_info(String bkmk_sanctner_info) {
+		this.bkmk_sanctner_info = bkmk_sanctner_info;
+	}
+	public String getBkmk_no() {
+		return bkmk_no;
+	}
+	public void setBkmk_no(String bkmk_no) {
+		this.bkmk_no = bkmk_no;
+	}
+	public int getEmpno() {
+		return empno;
+	}
+	public void setEmpno(int empno) {
+		this.empno = empno;
+	}
+	
+	
+
+}

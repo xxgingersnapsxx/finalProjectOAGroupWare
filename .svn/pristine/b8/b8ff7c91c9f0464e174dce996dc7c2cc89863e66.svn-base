@@ -1,0 +1,272 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<c:set var="icomlist" value="${dataMap.icomlist }" /> 
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/attendance/icommute.css">
+ 
+ 
+<!-- Date Range Picker  -->
+  <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+  <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<!-- datepicker 한국어로 -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/i18n/datepicker-ko.js"></script>
+        
+
+
+    
+        <script>                
+        $(document).ready(function() {
+
+            //datepicker 한국어로 사용하기 위한 언어설정
+            $.datepicker.setDefaults($.datepicker.regional['ko']);     
+        
+            // Datepicker            
+            $(".datepicker").datepicker({
+                showButtonPanel: true,
+                dateFormat: "yy-mm-dd",
+                onClose : function ( selectedDate ) {
+                
+                    var eleId = $(this).attr("id");
+                    var optionName = "";
+
+                    if(eleId.indexOf("StartDate") > 0) {
+                        eleId = eleId.replace("StartDate", "EndDate");
+                        optionName = "minDate";
+                    } else {
+                        eleId = eleId.replace("EndDate", "StartDate");
+                        optionName = "maxDate";
+                    }
+
+                    $("#"+eleId).datepicker( "option", optionName, selectedDate );        
+                    $(".searchDate").find(".chkbox2").removeClass("on"); 
+                }
+            }); 
+
+      
+
+            $(".dateclick").dateclick();    // DateClick
+            $(".searchDate").schDate();        // searchDate
+            
+        });
+
+        // Search Date
+        jQuery.fn.schDate = function(){
+            var $obj = $(this);
+            var $chk = $obj.find("input[type=radio]");
+            $chk.click(function(){                
+                $('input:not(:checked)').parent(".chkbox2").removeClass("on");
+                $('input:checked').parent(".chkbox2").addClass("on");                    
+            });
+        };
+
+        // DateClick
+        jQuery.fn.dateclick = function(){
+            var $obj = $(this);
+            $obj.click(function(){
+                $(this).parent().find("input").focus();
+            });
+        }    
+
+        
+        function setSearchDate(start){
+
+            var num = start.substring(0,1);
+            var str = start.substring(1,2);
+
+            var today = new Date();
+
+            //var year = today.getFullYear();
+            //var month = today.getMonth() + 1;
+            //var day = today.getDate();
+            
+            var endDate = $.datepicker.formatDate('yy-mm-dd', today);
+            $('#endDate').val(endDate);
+            
+            if(str == 'd'){
+                today.setDate(today.getDate() - num);
+            }else if (str == 'w'){
+                today.setDate(today.getDate() - (num*7));
+            }else if (str == 'm'){
+                today.setMonth(today.getMonth() - num);
+                today.setDate(today.getDate() + 1);
+            }
+
+            var startDate = $.datepicker.formatDate('yy-mm-dd', today);
+            $('#startDate').val(startDate);
+                    
+            // 종료일은 시작일 이전 날짜 선택하지 못하도록 비활성화
+            $("#endDate").datepicker( "option", "minDate", endDate );
+            
+            // 시작일은 종료일 이후 날짜 선택하지 못하도록 비활성화
+            $("#startDate").datepicker( "option", "maxDate", startDate );
+
+        }
+
+            
+        </script>
+
+
+</head>
+<body>
+
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row md-2">
+				<div class="col-sm-3">
+					<p class="menu-header">
+						<span id=attcolor style="color:#48a2de ">${loginUser.nm}</span>님의 부서별 개인 출퇴근 현황
+					</p>
+					 
+				</div>
+			</div>
+		</div>
+	</section>
+	<div class="dd">
+	
+	</div>
+	<div class="boxSearch">
+        <form name="search" action="<%=request.getContextPath()%>/attendance/department/icommute" method="GET">
+      
+        <!-- search -->
+        <table class="searchBox">
+            <caption></caption>
+            <colgroup>
+                <col width="123px">
+                <col width="*">
+            </colgroup>
+            <tbody>
+                <tr>
+                    <th class="whghl">조회기간</th>
+                    <td>
+                        <ul class="searchDate">
+                            <li>
+                                <span class="chkbox2">
+                                    <input type="radio" name="dateType" id="dateType1" onclick="setSearchDate('0d')"/>
+                                    <label for="dateType1">당일</label>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="chkbox2">
+                                    <input type="radio" name="dateType" id="dateType3" onclick="setSearchDate('1w')"/>
+                                    <label for="dateType3">1주</label>
+                                </span>
+                            </li>
+                            <li>
+                                <span class="chkbox2">
+                                    <input type="radio" name="dateType" id="dateType5" onclick="setSearchDate('1m')"/>
+                                    <label for="dateType5">1개월</label>
+                                </span>
+                            </li>    
+                             <li>
+                   
+<!--                               	<span class="input-group-append"> -->
+<!-- 									<button class="btn btn-basic" type="button" onclick="" data-card-widget="search"> -->
+<!-- 										<i class="fa fa-fw fa-search">검색</i> -->
+<!-- 									</button> -->
+<!-- 								</span> -->
+ 							<div class="btnnn">
+                			  <button type="submit" id="btnSearch" onclick="btnSearch()">검색</button>
+                		    </div>
+                            </li>
+                        </ul>
+                        
+                        <div class="clearfix">
+                            <!-- 시작일 -->
+                            <span class="dset">
+                                <input type="text" class="datepicker inpType" name="startDate" id="startDate" >
+                                <a href="#none" class="btncalendar dateclick">달력</a>
+                            </span>
+                            <span class="demi">~  </span>
+                            <!-- 종료일 -->
+                            <span class="dset">
+                                <input type="text" class="datepicker inpType" name="endDate" id="endDate" >
+                                <a href="#none" class="btncalendar dateclick">달력</a>
+                            </span>
+                        </div>    
+                    </td>
+                </tr>
+
+            <tbody>
+        </table>
+        </form>
+        </div>
+               
+   <script>
+	$(document).ready(function(){
+		if(${startDate != null && startDate != "" && endDate != null && endDate != "" }){
+			$("startDate").val("${startDate}");
+			$("endDate").val("${endDate}");
+			
+		}
+		
+		
+		
+	})
+
+    function btnSearch(){
+        $('form[name="search"]').submit();
+        alert(">>>>>");
+    
+}
+
+  </script>
+    
+
+	<div class="card-body">
+				<table class="table text-center">
+					<tr style="font-size:0.95em;">
+					
+						<th style="width:20%;">이 름</th>
+						<th style="width:20%;">부 서</th>
+						<th style="width:15%;">직 급</th>
+						<th style="width:15%;">출 근 시 간</th>
+						<th style="width:15%;">퇴 근 시 간</th>
+						<th style="width:15%;">상 태</th>
+					</tr>	
+					<c:if test="${empty icomlist }" >
+						<tr>
+							<td colspan="5">
+								<strong>해당 내용이 없습니다.</strong>
+							</td>
+						</tr>
+					</c:if>
+					<c:forEach items="${icomlist }" var="icom">
+						<tr style='font-size:0.85em;'>
+							<td>
+							 ${icom.nm }
+							</td>
+				
+							<td>
+							${icom.dept_code }
+							</td>
+							<td>
+							 ${icom.clsf_code }
+							</td>
+							<td>
+					   <fmt:formatDate value="${icom.attend_time }" pattern="yyyy:MM:dd HH:mm:ss"/> 
+							</td>
+							<td>
+						<fmt:formatDate value="${icom.lvffc_time }" pattern="yyyy:MM:dd HH:mm:ss"/> 
+							</td>
+							<td>
+							 ${icom.sttus_code }
+							</td>
+						</tr>
+					</c:forEach>	
+					
+				</table>
+			</div>
+              
+              
+</body>
+</html>

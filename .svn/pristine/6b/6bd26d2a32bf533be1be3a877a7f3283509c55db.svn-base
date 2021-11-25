@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="scner-Mapper">
+<!-- scner -->
+	<select id="selectSeqNextVal" resultType="int">
+		select
+		eccst_sanctner_seq.nextval as sanctner_no from dual
+	</select>
+	
+	<update id="insertSanctners" parameterType="scner">
+		insert into 
+		eccst_sanctner
+		values(#{sanctner_no},#{sanctn_no},#{sanctner_nm},#{sanctner_empno},#{ln_no},#{sanctn_sttus},#{lst_confirm_at},null)
+	</update>
+	
+	<select id="selectSanctners">
+		select * from 
+		eccst_sanctner
+		where sanctn_no=#{sanctn_no}
+		order by ln_no
+	</select>
+	
+	<update id="updateSanctner">
+		update eccst_sanctner
+		set sanctn_sttus=#{sanctn_sttus},lst_confirm_at=#{lst_confirm_at}
+		where sanctner_no = #{sanctner_no}
+	</update>
+	
+	<update id="deleteSanctners">
+		delete from eccst_sanctner
+		where sanctn_no=#{sanctn_no}
+	</update>
+</mapper>

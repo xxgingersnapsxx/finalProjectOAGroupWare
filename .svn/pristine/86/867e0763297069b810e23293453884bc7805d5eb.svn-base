@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DclzVac-Mapper">
+	
+	<!-- 휴가코드 -->
+	<sql id="vcatn_code">
+		<!-- 연차 -->
+		<if test="vcatn_code == 'K001'.toString()">
+			and vcatn_code = 'K001'
+		</if>
+
+		<!-- 오전 반차 -->
+		<if test="vcatn_code == 'K002'.toString()">
+			and vcatn_code = 'K002'
+		</if>
+
+		<!-- 오후 반차 -->
+		<if test="vcatn_code == 'K003'.toString()">
+			and vcatn_code ='K003'
+		</if>
+
+		<!-- 병가 -->
+		<if test="vcatn_code == 'K004'.toString()">
+			and vcatn_code ='K004'
+		</if>
+	</sql>
+	
+	<select id="selectVacList" resultType="dclzVac">
+		select *
+		from dclz_vcatn
+		where empno=#{empno}
+		<include refid="vcatn_code" />
+	</select>
+	
+	<select id="selectVacListCount" resultType="int">
+		select count(*)
+		from dclz_vcatn
+		where empno=#{empno}
+		<include refid="vcatn_code" />
+	</select>
+	
+	<update id="insertVac" parameterType="dclzVac">
+		insert into
+		dclz_vcatn(vcatn_no, vcatn_code, empno, tot_vcatn_daycnt, use_vcatn_daycnt,empnm)
+		values(#{vcatn_no},#{vcatn_code},#{empno},#{tot_vcatn_daycnt},0,#{empnm})
+	</update>
+	
+	<update id="updateVac" parameterType="dclzVac">
+		update
+		dclz_vcatn
+		set
+		use_vcatn_daycnt=#{use_vcatn_daycnt}
+		where vcatn_no=#{vcatn_no}
+	</update>
+	
+	<select id="selectVac" resultType="dclzVac">
+		select *
+		from dclz_vcatn
+		where vcatn_no = #{vcatn_no}
+	</select>
+	
+	<select id="selectVacSeqNextValue" resultType="int">
+		select vcatn_seq.nextval as vcatn_no from dual
+	</select>
+
+</mapper>

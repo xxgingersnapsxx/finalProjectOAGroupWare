@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DbxPublic-Mapper">
+	
+	<sql id="search">
+		<if test="searchType == 't'.toString()">
+			and sj like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'w'.toString()">
+			and emp_nm like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'c'.toString()">
+			and cn like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'tc'.toString()">
+			and (
+			sj like '%'||#{keyword}||'%'
+			or
+			cn like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'cw'.toString()">
+			and (
+			emp_nm like '%'||#{keyword}||'%'
+			or
+			cn like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'tcw'.toString()">
+			and (
+			sj like '%'||#{keyword}||'%'
+			or
+			emp_nm like '%'||#{keyword}||'%'
+			or
+			cn like '%'||#{keyword}||'%'						
+			)			
+		</if>
+	</sql>
+	<select id="selectSearchDbxAllList" resultType="dbx">
+		select
+		*
+		from
+		dbx
+		where dbx_no is not null
+		<include refid="search" />
+		order by lpad(dbx_no, 20, 0) desc	
+	</select>
+	
+	<select id="selectSearchDbxAllListCount" resultType="int">
+		select
+		count(*)
+		from
+		dbx
+		where dbx_no is not null
+		<include refid="search" />
+		order by lpad(dbx_no, 20, 0) desc	
+	</select>
+	
+	<select id="selectDbxAllByDbxno" parameterType="str" resultType="dbx">
+		select * 
+		from dbx
+		where dbx_no=#{dbx_no}
+	</select>
+	
+	
+	
+	
+	
+	<select id="selectSearchDbxList" resultType="dbx">
+		select
+		*
+		from
+		dbx
+		where dbx_no is not null
+		and dbx_se = 'E002'
+		<include refid="search" />
+		order by lpad(dbx_no, 20, 0) desc	
+	</select>
+	
+	<select id="selectSearchDbxListCount" resultType="int">
+		select
+		count(*)
+		from
+		dbx
+		where dbx_no is not null
+		and dbx_se = 'E002'			  	
+		<include refid="search" />
+		order by lpad(dbx_no, 20, 0) desc	
+	</select>
+	
+	<select id="selectDbxList" parameterType="int"  resultType="dbx">
+		select * from
+		
+        (
+            select * 
+            from dbx
+            where empno = #{empno}
+            and dbx_se = 'E002'
+                
+            union
+            
+            select *
+            from dbx
+            where dbx_no in (select dbx_no
+                            from dbx_cocnr
+                            where rcvr_empno = #{empno})
+        )
+        
+        order by lpad(dbx_no, 20, 0) desc	
+	
+	</select>
+	
+	<select id="selectDbxByDbxno" parameterType="str" resultType="dbx">
+		select * 
+		from dbx
+		where dbx_no=#{dbx_no}
+		and dbx_se = 'E002'
+	</select>
+	
+	<update id="insertDbx" parameterType="dbx">
+		insert 
+		into
+		dbx(dbx_no,empno,dbx_se,sj,rgsde,emp_nm,cn)
+		values
+		(#{dbx_no},#{empno},'E002',#{sj},sysdate,#{emp_nm},#{cn})
+	</update>
+	
+	<update id="updateDbx" parameterType="dbx">
+		update 
+		dbx 
+		set 
+		sj=#{sj}, cn=#{cn}
+		where dbx_no=#{dbx_no}
+	</update>
+	
+	<update id="updateDbxSeModify" parameterType="str">
+		update dbx 
+		set dbx_se = 'E002' 
+		where dbx_no=#{dbx_no}
+	</update>
+	
+	<update id="deleteDbx" parameterType="str">
+		delete 
+		from dbx 
+		where dbx_no=#{dbx_no}
+		and dbx_se = 'E002'
+	</update>
+	
+
+	
+	<select id="selectDbxSeqNext" resultType="int">
+		select dbx_seq.nextval as dbx_no from dual
+	</select>
+</mapper>
+
+
+
+
+
+
+
+

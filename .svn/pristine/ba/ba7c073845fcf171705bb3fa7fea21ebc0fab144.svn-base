@@ -1,0 +1,17 @@
+package kr.or.gw.dao;
+
+import java.sql.SQLException;
+
+import kr.or.gw.dto.DclzMngtVO;
+import kr.or.gw.dto.OrgnztEmpMngtVO;
+
+public interface MypageDAO {
+	// 코드No -> CodeDc
+	public String selectCodeDcbyCodeNo(String code_no) throws SQLException;
+	
+	// 당일 출퇴근 시간 조회
+	public DclzMngtVO selectCheckInOutTime(int empno) throws SQLException;
+	
+	// 회원 정보 수정
+	public void modifyEmp(OrgnztEmpMngtVO emp) throws SQLException;
+}

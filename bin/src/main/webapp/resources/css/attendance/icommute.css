@@ -1,0 +1,39 @@
+@charset "UTF-8";
+
+
+body {
+  padding: 10px 20px;
+}
+.menu-header {
+  display: inline;
+  font-size: 16px;
+  font-weight: bold;
+  padding: 8px;
+}
+.this {
+  font-size: 16px;
+  font-weight: bold;
+  color: #004680;
+}
+
+.content-header {
+  border-bottom: 5px solid #004680;
+}
+.card-header {
+  margin-top: 20px;
+  border-bottom: none;
+}
+.card-body {
+  padding-top: 8px;
+  height: 60vh;
+}
+
+.attcolor{
+	color: #48a2de;
+}
+
+/* content-header 와 div row 공간  */
+
+.dd {
+	padding : 30px;
+}

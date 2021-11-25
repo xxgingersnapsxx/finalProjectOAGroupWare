@@ -1,0 +1,46 @@
+package kr.or.gw.command;
+
+import java.util.Date;
+
+import kr.or.gw.dto.DbxVO;
+
+public class DbxRegistCommand {
+	
+	private String sj;
+	private String cn;
+	private int empno;
+	
+	public String getSj() {
+		return sj;
+	}
+	public void setSj(String sj) {
+		this.sj = sj;
+	}
+	public String getCn() {
+		return cn;
+	}
+	public void setCn(String cn) {
+		this.cn = cn;
+	}
+	public int getEmpno() {
+		return empno;
+	}
+	public void setEmpno(int empno) {
+		this.empno = empno;
+	}
+	@Override
+	public String toString() {
+		return "DbxRegistCommand [sj=" + sj + ", cn=" + cn + ", empno=" + empno + "]";
+	}
+	
+	public DbxVO toDbxVO() {
+		DbxVO dbx = new DbxVO();
+		dbx.setSj(this.sj);
+		dbx.setRgsde(new Date());
+		dbx.setEmpno(this.empno);
+		dbx.setCn(this.cn);
+	
+		
+		return dbx;
+	}
+}

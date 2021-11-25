@@ -1,0 +1,17 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.gw.dto.DclzMngtVO;
+
+public interface DclzService {
+	
+	List<DclzMngtVO> getDclzList(int empno) throws SQLException;
+	
+	List<DclzMngtVO> getDclzCount(int empno) throws SQLException;
+	
+	Map<String, Object> DclzLists(Map<String,String> paramMap) throws SQLException;
+	
+}

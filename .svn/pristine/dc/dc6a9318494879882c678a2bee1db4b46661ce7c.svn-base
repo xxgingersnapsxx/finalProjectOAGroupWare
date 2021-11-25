@@ -1,0 +1,213 @@
+package kr.or.gw.controller;
+
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import kr.or.gw.command.SanctnLnRegistCommand;
+import kr.or.gw.command.TreeEmpCriteria;
+import kr.or.gw.dto.EccstBkmkSanctnLnDtlsVO;
+import kr.or.gw.dto.EccstBkmkSanctnLnVO;
+import kr.or.gw.dto.EccstRegstrFormVO;
+import kr.or.gw.dto.OrgnztEmpMngtVO;
+import kr.or.gw.service.EbkmkService;
+import kr.or.gw.service.ErfService;
+import kr.or.gw.service.TreeEmpService;
+
+@Controller
+@RequestMapping("/approval/ddbox")
+public class ErfController {
+	
+	@Autowired
+	private ErfService erfService;
+	
+	@Autowired
+	private TreeEmpService treeEmpservice;
+	
+	@Autowired
+	private EbkmkService ebkmkService;
+	
+	@RequestMapping("/form")
+	public ModelAndView list(ModelAndView mnv) throws SQLException {
+		String url = "approval/ddbox/form";
+		
+		Map<String, Object> dataMap = erfService.getErfList();
+		
+		mnv.addAllObjects(dataMap);
+		mnv.setViewName(url);
+		
+		return mnv;
+		
+	}
+	
+	@RequestMapping("/registForm")
+	public ModelAndView registForm(HttpServletRequest request, String form_no, ModelAndView mnv) throws SQLException {
+		
+//		String holidayStart = request.getParameter("holidayStart");
+		
+		/** 파라미터 검증 */
+		
+		
+		
+		TreeEmpCriteria cri = new TreeEmpCriteria();
+		
+		String url = "approval/ddbox/regist";
+		EccstRegstrFormVO erf = null;
+		
+		/** ${holidayStart} */
+//		String form_cn = erf.getForm_cn();
+		
+//		
+//		Enumeration<String> parameterNames = request.getParameterNames();
+//		while(parameterNames.hasMoreElements()) {
+//			String nextElement = parameterNames.nextElement();
+//			form_cn = form_cn.replace("${"+nextElement+"}", request.getParameter(nextElement));
+//			
+//		}
+		
+		
+		
+		erf = erfService.getErf(form_no);
+		
+		
+		
+		
+		
+		List<OrgnztEmpMngtVO> empList = treeEmpservice.getEmpListnopg(cri);
+		
+		mnv.addObject("erf", erf);
+		mnv.addObject("empList",empList);
+		mnv.setViewName(url);
+		return mnv;
+	}
+	
+	@RequestMapping("/saveSancForm")
+	public ModelAndView saveSancForm(ModelAndView mnv,String saveSancID,String erfID,String saver)throws SQLException,NumberFormatException {
+		
+		String url="approval/ddbox/saveSanctner";
+		
+		String[] split = saveSancID.split(",");
+		
+		List<OrgnztEmpMngtVO> empList = new ArrayList<OrgnztEmpMngtVO>();
+		
+		for(int i = 0; i < split.length; i++) {
+			OrgnztEmpMngtVO emp = new OrgnztEmpMngtVO();
+			emp = treeEmpservice.getEmp(Integer.parseInt(split[i]));
+			empList.add(emp);
+			
+		}
+		
+		mnv.addObject("saver",saver);
+		mnv.addObject("erfId",erfID);
+		mnv.addObject("empList",empList);
+		mnv.setViewName(url);
+		return mnv;
+	}
+
+	
+	@RequestMapping("/saveSanctn")
+	public String saveSanctners(SanctnLnRegistCommand regReq,RedirectAttributes rttr)throws SQLException{
+		
+		String url = "approval/ddbox/saveSuccess";
+		int seq = ebkmkService.getbkmkSeq();
+		
+		EccstBkmkSanctnLnVO ebkmkVO = new EccstBkmkSanctnLnVO();
+		
+		ebkmkVO.setBkmk_no("LNBM"+seq);
+		ebkmkVO.setForm_no(regReq.getForm_no());
+		ebkmkVO.setRgstr_empno(regReq.getSaveUser());
+		ebkmkVO.setBkmk_sj(regReq.getLineName());
+		ebkmkVO.setBkmk_info(regReq.getLineInfo());
+		
+		ebkmkService.insertBkmk(ebkmkVO);
+		
+		String[] saves = regReq.getEmpno();
+		
+		for(int i = saves.length; i > 0; i--) {
+			EccstBkmkSanctnLnDtlsVO ebkmkDtlsVO = new EccstBkmkSanctnLnDtlsVO();
+			ebkmkDtlsVO.setBkmk_no("LNBM"+seq);
+			ebkmkDtlsVO.setSaved_empno(Integer.parseInt(saves[i-1]));
+			ebkmkDtlsVO.setLn_no(i);
+			ebkmkDtlsVO.setForm_no(regReq.getForm_no());
+			ebkmkService.insertBkmkDtls(ebkmkDtlsVO);
+		}
+		
+		return url;
+	}
+	
+	@RequestMapping("/selectSancForm")
+	public ModelAndView selectSancForm (ModelAndView mnv,HttpServletRequest request)throws SQLException{
+		
+		String url = "approval/ddbox/selectSanctnerLine";
+		HttpSession session = request.getSession();
+		OrgnztEmpMngtVO emp = (OrgnztEmpMngtVO)session.getAttribute("loginUser");
+		
+		List<EccstBkmkSanctnLnVO> ebkmkList =ebkmkService.getBkmkList(emp.getEmpno());
+		
+		mnv.addObject("ebkmkList",ebkmkList);
+		mnv.setViewName(url);
+		
+		return mnv;
+	}
+	
+	@RequestMapping("/selectSancDtls")
+	@ResponseBody
+	public ResponseEntity<List<OrgnztEmpMngtVO>> getDtls(String bkmk_no) throws Exception{
+		ResponseEntity<List<OrgnztEmpMngtVO>> entity = null;
+		TreeEmpCriteria cri = new TreeEmpCriteria();
+		
+		
+		
+		try {
+			List<EccstBkmkSanctnLnDtlsVO> bkmkDtlsList = ebkmkService.getBkmkListDetail(bkmk_no);
+			List<OrgnztEmpMngtVO> empList = new ArrayList<OrgnztEmpMngtVO>();
+			
+			for(int i = 0; i < bkmkDtlsList.size(); i++) {
+				EccstBkmkSanctnLnDtlsVO dtlsVO = bkmkDtlsList.get(i);
+				int empno = dtlsVO.getSaved_empno();
+				OrgnztEmpMngtVO empVO = treeEmpservice.getEmp(empno);
+				empList.add(empVO);
+			}
+			
+			entity = new ResponseEntity<List<OrgnztEmpMngtVO>>(empList, HttpStatus.OK);
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			entity = new ResponseEntity<List<OrgnztEmpMngtVO>>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return entity;
+	}
+	
+	@RequestMapping("/removeLine")
+	@ResponseBody
+	public ResponseEntity<String> removeLine(String bkmk_no) throws Exception{
+		ResponseEntity<String> entity = null;
+		
+		try {
+			ebkmkService.deleteBkmkDtls(bkmk_no);
+			ebkmkService.deleteBkmk(bkmk_no);
+			
+			entity = new ResponseEntity<String>("good", HttpStatus.OK);
+			
+		} catch (Exception e) {
+			System.out.println(e);
+			entity = new ResponseEntity<String>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+		return entity;
+	}
+}

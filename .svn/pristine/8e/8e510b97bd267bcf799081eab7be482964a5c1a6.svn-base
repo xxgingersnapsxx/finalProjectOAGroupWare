@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Dbx-Mapper">
+	
+	<sql id="search">
+		<if test="searchType == 't'.toString()">
+			and title like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'w'.toString()">
+			and writer like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'c'.toString()">
+			and content like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'tc'.toString()">
+			and (
+			title like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'cw'.toString()">
+			and (
+			writer like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'tcw'.toString()">
+			and (
+			title like '%'||#{keyword}||'%'
+			or
+			writer like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+	</sql>
+	<select id="selectSearchDbxList" resultType="dbx">
+		select
+		*
+		from
+		dbx
+		where DBX_NO is not null  			  	
+		<include refid="search" />
+		order by RGSDE desc
+	</select>
+	
+	<select id="selectSearchDbxListCount" resultType="int">
+		select
+		count(*)
+		from
+		dbx
+		where DBX_NO is not null  			  	
+		<include refid="search" />
+		order by RGSDE desc
+	</select>
+	
+	<select id="selectDbxList" resultType="dbx">
+		select * 
+		from dbx
+		order by DBX_NO desc		
+	</select>
+	
+	<select id="selectDbxByDbxno"  resultType="dbx">
+		select * 
+		from dbx
+		where DBX_NO=#{DBX_NO}
+	</select>
+	
+	<update id="insertDbx" parameterType="dbx">
+		insert 
+		into
+		dbx(DBX_NO,EMPNO,DBX_SE,SJ,CN,RGSDE)
+		values
+		('dbx'||dbx_seq.nextval,#{empno},'E001',#{sj},#{cn},sysdate)
+	</update>
+	
+	<update id="updateDbx" parameterType="dbx">
+		update 
+		DBX 
+		set 
+		SJ=#{SJ}, CN=#{CN}, RGSDE=sysdate 
+		where DBX_NO='dbx'||#{DBX_NO}
+	</update>
+	
+	<update id="deleteDbx" parameterType="int">
+		delete 
+		from DBX 
+		where DBX_NO='dbx'||#{DBX_NO}
+	</update>
+	
+
+	
+	<select id="selectDbxSeqNext" resultType="int">
+		select dbx_seq.nextval as BBSCTT_NO from dual
+	</select>
+</mapper>
+
+
+
+
+
+
+
+

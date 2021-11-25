@@ -1,0 +1,29 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.gw.dao.DclzDAO;
+import kr.or.gw.dto.DclzMngtVO;
+
+public class DclzServiceImpl implements DclzService{
+	private DclzDAO dclzDAO;
+	
+	public void setDclzDAO(DclzDAO dclzDAO) {
+		this.dclzDAO = dclzDAO;
+	}
+	
+	@Override
+	public List<DclzMngtVO> getDclzList(int empno) throws SQLException {
+		List<DclzMngtVO> dclzList = dclzDAO.selectListDclz(empno);
+		return dclzList;
+	}
+
+	@Override
+	public List<DclzMngtVO> getDclzCount(int empno ) throws SQLException {
+		List<DclzMngtVO> dclzCount = dclzDAO.selectDclzCount(empno);
+		return dclzCount;
+	}
+	
+	
+}

@@ -1,0 +1,66 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.gw.command.AllWorkCriteria;
+import kr.or.gw.command.AllWorkPageMaker;
+import kr.or.gw.dao.JobRcvDAO;
+import kr.or.gw.dto.JobRcvVO;
+
+public class JobRcvServiceImpl implements JobRcvService {
+
+	private JobRcvDAO jobRcvDAO;
+	public void setJobRcvDAO(JobRcvDAO jobRcvDAO) {
+		this.jobRcvDAO = jobRcvDAO;
+	}
+
+	@Override
+	public Map<String, Object> getJobRcvList(AllWorkCriteria cri) throws SQLException {
+		
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		
+		// 현재 page 번호에 맞는 리스트를 perPageNum 개수 만큼 가져온다.
+		List<JobRcvVO> jobRcvList = jobRcvDAO.selectSearchJobRcvList(cri);
+		
+		int totalCount = jobRcvDAO.selectSearchJobRcvListCount(cri);
+		
+		// pageMaker 생성
+		AllWorkPageMaker pageMaker = new AllWorkPageMaker();
+		pageMaker.setCri(cri);
+		pageMaker.setTotalCount(totalCount);
+		
+		dataMap.put("jobRcvList", jobRcvList);
+		dataMap.put("pageMaker", pageMaker);
+		
+		return dataMap;
+	}
+
+	@Override
+	public JobRcvVO getJobRcv(String job_index) throws SQLException {
+		JobRcvVO jobRcv = jobRcvDAO.selectJobRcvByJobIn(job_index);
+		return jobRcv;
+	}
+
+	@Override
+	public void modify(JobRcvVO jobRcv) throws SQLException {
+		jobRcvDAO.updateJobRcv(jobRcv);
+	}
+
+	@Override
+	public void remove(String job_index) throws SQLException {
+		jobRcvDAO.deleteJobRcv(job_index);
+	}
+	
+	@Override
+	public void share(JobRcvVO jobRcv) throws SQLException {
+		String job_index = jobRcvDAO.selectJobRcvSequenceNextValue();
+		
+		jobRcv.setJob_index(job_index);
+		
+		jobRcvDAO.insertJobRcv(jobRcv);
+	}
+
+}

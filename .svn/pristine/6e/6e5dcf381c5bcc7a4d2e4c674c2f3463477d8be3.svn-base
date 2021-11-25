@@ -1,0 +1,34 @@
+package kr.or.gw.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.gw.command.SearchCriteria;
+import kr.or.gw.command.basicCriteria;
+import kr.or.gw.dto.DbxVO;
+
+public interface DbxPublicDAO {
+
+	// 전체 문서
+	List<DbxVO> selectDbxAllCriteria(basicCriteria cri) throws SQLException;
+
+	int selectDbxAllCriteriaTotalCount(basicCriteria cri) throws SQLException;
+
+	DbxVO selectDbxAllByDbx_no(String dbx_no) throws SQLException;
+
+	// 공유 문서만
+	List<DbxVO> selectDbxCriteria(basicCriteria cri) throws SQLException;
+	
+	int selectDbxCriteriaTotalCount(basicCriteria cri) throws SQLException;
+
+	DbxVO selectDbxByDbx_no(String dbx_no) throws SQLException;
+
+	void insertDbx(DbxVO dbx) throws SQLException;
+
+	void updateDbx(DbxVO dbx) throws SQLException;
+
+	void deleteDbx(String dbx_no) throws SQLException;
+
+	// news_seq.nextval 가져오기
+	String selectDbxSeqNext() throws SQLException;
+}

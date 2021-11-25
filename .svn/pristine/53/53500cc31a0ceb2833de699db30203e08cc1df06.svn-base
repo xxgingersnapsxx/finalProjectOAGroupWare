@@ -1,0 +1,48 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.gw.command.VacCriteria;
+import kr.or.gw.command.VacPageMaker;
+import kr.or.gw.dao.DclzVacDAO;
+import kr.or.gw.dto.DclzVacVO;
+
+public class DclzVacServiceImpl implements DclzVacService{
+	
+	private DclzVacDAO dclzVacDAO;
+	public void setDclzVacDAO(DclzVacDAO dclzVacDAO) {
+		this.dclzVacDAO = dclzVacDAO;
+	}
+	
+	@Override
+	public DclzVacVO getVac(String vcatn_no) throws SQLException {
+		DclzVacVO vac = dclzVacDAO.selectVac(vcatn_no);
+		return vac;
+	}
+
+	@Override
+	public Map<String, Object> getVacList(VacCriteria cri, int empno) throws SQLException {
+		List<DclzVacVO> vacList = dclzVacDAO.selectVacList(cri, empno);
+		int totalCount = dclzVacDAO.selectVacListCount(cri, empno);
+		
+		Map<String, Object> dataMap = new HashMap<String, Object>();
+		
+		VacPageMaker pm = new VacPageMaker();
+		pm.setCri(cri);
+		pm.setTotalCount(totalCount);
+		
+		dataMap.put("vacList", vacList);
+		dataMap.put("pageMaker",pm);
+		
+		return dataMap;
+	}
+
+	@Override
+	public void modify(DclzVacVO vac) throws SQLException {
+		dclzVacDAO.updateVac(vac);
+	}
+	
+}

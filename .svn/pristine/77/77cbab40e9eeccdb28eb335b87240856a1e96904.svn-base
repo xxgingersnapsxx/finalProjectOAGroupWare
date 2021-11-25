@@ -1,0 +1,25 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import kr.or.gw.command.SearchCriteria;
+import kr.or.gw.dto.JobRcvVO;
+
+public interface JobRcvService {
+
+	// 리스트 조회
+	Map<String, Object> getJobRcvList(SearchCriteria cri) throws SQLException;
+	
+	// 상세보기
+	JobRcvVO getJobRcv(String job_index) throws SQLException;
+	
+	// 등록
+	void regist(JobRcvVO job) throws SQLException;
+	
+	// 수정
+	void modify(JobRcvVO job) throws SQLException;
+	
+	// 삭제
+	void remove(String job_index) throws SQLException;
+}

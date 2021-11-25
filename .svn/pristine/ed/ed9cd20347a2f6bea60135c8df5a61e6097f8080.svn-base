@@ -1,0 +1,99 @@
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/css/board/notice.css">
+<!-- myPageDetail.css -->
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/css/mypage/myPageDetail.css">
+</head>
+<style>
+	.profile-contents{
+		display: inline;
+	}
+</style>
+<body>
+	<div class="pop-container" style="min-width:800px;">
+		<section class="content-header">
+			<div class="container-fluid">
+				<div class="row md-2">
+					<p class="menu-header" style="display: inline;">
+						회원 정보 상세
+					</p>
+					<button type="button" class="btn btn-basic" id="editBtn">수 정</button>
+					<button type="button" class="btn btn-cancle" id="cancelBtn" onclick="CloseWindow();">닫 기</button>
+				</div><!-- ./row md-2 -->
+			</div><!-- ./container-fluid -->
+		</section><!-- ./content-header -->
+		<div class="profile-contents">
+			<table>
+				<tr>
+					<td rowspan="7"><img  class="myProfile" src="https://bit.ly/3pCT0g0" alt="profile img" style="height: 400px; width: 250px"></td>
+					<td>사 번</td>
+					<td><input type="text" disabled="disabled" value="${loginUser.empno }"></td>
+				</tr>
+				<tr>
+					<td>이 름</td>
+					<td><input type="text" disabled="disabled" value="${loginUser.nm }"></td>
+				</tr>
+				<tr>
+					<td>부서코드</td>
+					<td><input type="text" disabled="disabled" <%-- value="${loginUser.dept_code } --%>"></td>
+				</tr>
+				<tr>
+					<td>직급코드</td>
+					<td><input type="text" disabled="disabled" value="${loginUser.clsf_code}"></td>
+				</tr>
+				<tr>
+					<td>직책코드</td>
+					<td><input type="text" disabled="disabled" value="${loginUser.rspofc_code}"></td>
+				</tr>
+				<tr>
+					<td>입사일</td>
+					<td><fmt:formatDate value="${loginUser.encpn}" pattern="yyyy-MM-dd"/></td>
+				</tr>
+				<tr>
+					<td>퇴사일</td>
+					<td><input type="text" disabled="disabled" value="${loginUser.retire_de}"></td>
+				</tr>
+				<tr>
+					<td>연락처</td>
+					<td colspan="2" value="${loginUser.cttpc}"></td>
+				</tr>
+				<tr>
+					<td>이메일 주소</td>
+					<td colspan="2">${loginUser.email_adres}</td>
+				</tr>
+				<tr>
+					<td>팩스번호</td>
+					<td colspan="2"><input type="text" disabled="disabled" value="${loginUser.fxnum}"></td>
+				</tr>
+				<tr>
+					<td>결재서명</td>
+					<td colspan="2"><input type="text" disabled="disabled" value="${loginUser.sanctn_sign}"></td>
+				</tr>
+				<tr>
+					<td>활성여부</td>
+					<td colspan="2"><input type="text" disabled="disabled" value="${loginUser.actvty_at}"></td>
+				</tr>
+				<tr>
+					<td>IP 주소</td>
+					<td colspan="2"><input type="text" disabled="disabled" value="${loginUser.ip_adres}"></td>
+				</tr>
+				<tr>
+					<td>권한 코드</td>
+					<td colspan="2"><input type="text" disabled="disabled" value="${loginUser.author_code}"></td>
+				</tr>
+<!-- 				<tr>
+					<td>비밀번호</td>
+					<td colspan="2"><input type="text" disabled="disabled"></td>
+				</tr> -->
+			</table>
+		</div>
+	</div><!-- ./pop-container -->
+	<br>
+	<br>
+</body>
+</html>

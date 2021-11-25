@@ -1,0 +1,36 @@
+package kr.or.gw.dto;
+
+
+/**
+ * @author 장하늘
+ * 휴가코드VO
+ */
+
+public class DclzVcatnCodeVO {
+	
+	private int vcatn_code; //휴가코드
+	private String vcatn_nm; //휴가명
+	private int vcatn_daycnt; //휴가일수
+	
+	public int getVcatn_code() {
+		return vcatn_code;
+	}
+	public void setVcatn_code(int vcatn_code) {
+		this.vcatn_code = vcatn_code;
+	}
+	public String getVcatn_nm() {
+		return vcatn_nm;
+	}
+	public void setVcatn_nm(String vcatn_nm) {
+		this.vcatn_nm = vcatn_nm;
+	}
+	public int getVcatn_daycnt() {
+		return vcatn_daycnt;
+	}
+	public void setVcatn_daycnt(int vcatn_daycnt) {
+		this.vcatn_daycnt = vcatn_daycnt;
+	}
+	
+	
+
+}

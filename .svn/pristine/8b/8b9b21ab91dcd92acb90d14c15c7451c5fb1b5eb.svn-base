@@ -1,0 +1,28 @@
+package kr.or.gw.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+@Controller
+@RequestMapping("/mypage")
+public class MyPageController {
+	
+	@RequestMapping("")
+	public String mypage() {
+		String url = "/mypage/mypage";
+		return url;
+	}
+
+	@RequestMapping(value = "/myPageDetails.do", method = RequestMethod.GET)
+	public String myPageDetails() {
+		String url = "/mypage/myPageDetails";
+		return url;
+	}
+	
+	@RequestMapping(value="/myPageDetailsModify")
+	public String modifyForm() {
+		String url = "mypage/myPageDetailsModify";
+		return url;
+	}
+}

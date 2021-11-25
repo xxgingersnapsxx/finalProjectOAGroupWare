@@ -1,0 +1,83 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<c:set var="icomlist" value="${dataMap.icomlist }" /> 
+
+
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="<%=request.getContextPath()%>/resources/css/attendance/icommute.css">
+<title></title>
+</head>
+<body>
+	<section class="content-header">
+		<div class="container-fluid">
+			<div class="row md-2">
+				<div class="col-sm-3">
+					<p class="menu-header">
+						<span id=attcolor style="color:#48a2de ">${loginUser.nm}</span>님의 부서별 개인 출퇴근 현황
+					</p>
+					 
+				</div>
+			</div>
+		</div>
+	</section>
+	<div class="dd">
+	</div>
+	<div class="card-body">
+	<iframe src="<%=request.getContextPath()%>/attendance/department/icommuteDate" style="border:1px bold blank; width:1012.5px; height:350px;"></iframe>
+				<table class="table text-center">
+					<tr style="font-size:0.95em;">
+					
+						<th style="width:20%;">이 름</th>
+						<th style="width:20%;">부 서</th>
+						<th style="width:15%;">직 급</th>
+						<th style="width:15%;">출 근 시 간</th>
+						<th style="width:15%;">퇴 근 시 간</th>
+						<th style="width:15%;">상 태</th>
+					</tr>	
+					<c:forEach items="${icomlist }" var="icom">
+						<tr style='font-size:0.85em;'>
+							<td>
+							 ${icom.nm }
+							</td>
+							<td>
+							${icom.dept_code }
+							</td>
+							<td>
+							 ${icom.clsf_code }
+							</td>
+							<td>
+							<fmt:formatDate value="${icom.dclzMngtVO.attend_time }" pattern="HH:mm:ss"/>
+							</td>
+							<td>
+							<fmt:formatDate value="${icom.dclzMngtVO.lvffc_time }" pattern="HH:mm:ss"/>
+							</td>
+							<td>
+							 ${icom.dclzMngtVO.sttus_code }
+							</td>
+						</tr>
+						<%-- 	<td>
+								<c:if test="${!empty mngt.atchList }">
+									<i class="nav-icon fas fa-file"></i>
+								</c:if>
+							</td>
+							<td data-target="mngt-emp_nm">${mngt.emp_nm }</td>
+							<td>
+								<fmt:formatDate value="${mngt.rgsde }" pattern="yyyy-MM-dd"/>
+							</td>
+							<td>${mngt.rdcnt }</td>
+						</tr> --%>
+					</c:forEach>	
+				</table>
+			</div>
+              
+              
+</body>
+</html>

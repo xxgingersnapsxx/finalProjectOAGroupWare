@@ -1,0 +1,50 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
+
+import kr.or.gw.dao.MypageDAO;
+import kr.or.gw.dto.OrgnztEmpMngtVO;
+
+public class MyPageServiceImpl implements MypageService {
+
+	private MypageDAO mypageDAO;
+
+	public void setMypageDAO(MypageDAO mypageDAO) {
+		this.mypageDAO = mypageDAO;
+	}
+
+	/*
+	 * @Override public String selectCodeDcbyCodeNo(String code_no) throws
+	 * SQLException { String code_dc = mypageDAO.selectCodeDcbyCodeNo(code_no);
+	 * return code_dc; }
+	 */
+
+	/*
+	 * @Override public Map<String, String> selectCodeDcbyCodeNo(String code_no)
+	 * throws SQLException { Map<String, String> dataMap = new HashMap<String,
+	 * String>();
+	 * 
+	 * String codeDc = mypageDAO.selectCodeDcbyCodeNo(code_no);
+	 * System.out.println(codeDc);
+	 * 
+	 * dataMap.put("codeDc", codeDc);
+	 * 
+	 * return dataMap; }
+	 */
+
+	@Override
+	public String selectCodeDcbyCodeNo(String code_no) throws SQLException {
+
+		String codeDc = mypageDAO.selectCodeDcbyCodeNo(code_no);
+//		System.out.println(codeDc);
+
+		return codeDc;
+	}
+
+	@Override
+	public void modify(OrgnztEmpMngtVO emp) throws SQLException {
+		mypageDAO.modifyEmp(emp);
+	}
+}

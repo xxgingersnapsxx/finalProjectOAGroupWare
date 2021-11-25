@@ -1,0 +1,122 @@
+package kr.or.gw.controller;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import kr.or.gw.command.DbxModifyCommand;
+import kr.or.gw.command.DbxRegistCommand;
+import kr.or.gw.command.SearchCriteria;
+import kr.or.gw.dto.DbxVO;
+import kr.or.gw.service.DbxService;
+
+@Controller
+@RequestMapping("/document/individual")
+public class DbxController {
+	
+	@Autowired
+	private DbxService dbxService;
+	
+	@RequestMapping("/list")
+	public ModelAndView list(SearchCriteria cri, ModelAndView mnv)throws SQLException{
+		String url="document/individual/list";		
+		
+		Map<String,Object> dataMap = dbxService.getDbxList(cri);
+		
+		mnv.addAllObjects(dataMap);
+		mnv.setViewName(url);
+		
+		return mnv;
+	}
+	
+	@RequestMapping(value = "/document/registForm.do", method = RequestMethod.GET)
+	public void loginForm() {
+	}
+	
+	@RequestMapping("/regist")
+	public String regist(DbxRegistCommand regReq, 
+							HttpServletRequest request,
+							RedirectAttributes rttr)throws Exception{
+		String url="redirect:/dbx/list.do";
+		
+		DbxVO dbx=regReq.toDbxVO();
+		
+//		dbx.setTitle(HTMLInputFilter.htmlSpecialChars(dbx.getTitle()));
+		dbx.setSj((String)request.getAttribute("XSStitle"));
+		dbxService.regist(dbx);
+		
+		rttr.addFlashAttribute("from","regist");
+		
+		return url;
+	}
+	
+   @RequestMapping("/detail")
+   public ModelAndView detail(String dbx_no,String from, ModelAndView mnv )throws SQLException{
+      String url="document/individual/detail";      
+      
+      DbxVO dbx =null;
+      if(from!=null && from.equals("list")) {
+         dbx=dbxService.getDbx(dbx_no);
+         url="redirect:/dbx/detail.do?dbx_no="+dbx_no;
+      }else {
+         dbx=dbxService.getDbxForModify(dbx_no);
+      }
+               
+      mnv.addObject("dbx",dbx);      
+      mnv.setViewName(url);
+      
+      return mnv;
+   }
+	
+	@RequestMapping("/modifyForm")
+	public ModelAndView modifyForm(String dbx_no,ModelAndView mnv)throws SQLException{
+		String url="document/individual/modify";
+		
+		DbxVO dbx = dbxService.getDbxForModify(dbx_no);
+		
+		mnv.addObject("dbx",dbx);		
+		mnv.setViewName(url);
+		
+		return mnv;
+	}
+	
+
+	@RequestMapping(value="/modify",method=RequestMethod.POST)
+	public String modifyPost(DbxModifyCommand modifyReq,
+								HttpServletRequest request,
+			 					RedirectAttributes rttr) throws Exception{
+		
+		String url = "redirect:/document/individual/detail.do";
+		
+		DbxVO dbx = modifyReq.toDbxVO();
+//		dbx.setTitle(HTMLInputFilter.htmlSpecialChars(dbx.getTitle()));
+		dbx.setSj((String)request.getAttribute("XSStitle"));
+		
+		dbxService.modify(dbx);
+		
+		rttr.addAttribute("dbx_no",dbx.getDbx_no());
+		rttr.addFlashAttribute("from","modify");
+		
+		return url;
+	}
+	
+	@RequestMapping(value="/remove",method=RequestMethod.POST)
+	public String remove(String dbx_no, RedirectAttributes rttr) throws Exception{
+		String url = "redirect:/document/individual/detail.do";
+		
+		dbxService.remove(dbx_no);
+		
+		rttr.addAttribute("dbx_no",dbx_no);
+		rttr.addFlashAttribute("from","remove");
+		return url;
+	}
+	
+}

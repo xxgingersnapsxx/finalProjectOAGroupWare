@@ -1,0 +1,30 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.gw.dao.NtcnDAO;
+import kr.or.gw.dto.JobMngtVO;
+import kr.or.gw.dto.NtcnVO;
+
+public class NtcnServiceImpl implements NtcnService {
+
+	private NtcnDAO ntcnDAO;
+
+	public void setNtcnDAO(NtcnDAO ntcnDAO) {
+		this.ntcnDAO = ntcnDAO;
+	}
+
+	@Override
+	public int countNtcnList(int empno) throws SQLException {
+		int ntcnCnt = ntcnDAO.countNtcnList(empno);
+		return ntcnCnt;
+	}
+
+	@Override
+	public List<NtcnVO> unCkedNtcnList(int empno) throws SQLException {
+		List<NtcnVO> ntcnList = ntcnDAO.unCkedNtcnList(empno);
+		
+		return ntcnList;
+	}
+}

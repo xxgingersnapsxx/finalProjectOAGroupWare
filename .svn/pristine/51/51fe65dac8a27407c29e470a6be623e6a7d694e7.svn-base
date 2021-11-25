@@ -1,0 +1,41 @@
+package kr.or.gw.dto;
+
+public class EccstDbxVO {
+	private String ecccbx_no;
+	private String eccdbx_code;
+	private String sanctn_no;
+	private int rec_empno;
+	private String coop_at;
+	
+	public String getEcccbx_no() {
+		return ecccbx_no;
+	}
+	public void setEcccbx_no(String ecccbx_no) {
+		this.ecccbx_no = ecccbx_no;
+	}
+	public String getEccdbx_code() {
+		return eccdbx_code;
+	}
+	public void setEccdbx_code(String eccdbx_code) {
+		this.eccdbx_code = eccdbx_code;
+	}
+	public String getSanctn_no() {
+		return sanctn_no;
+	}
+	public void setSanctn_no(String sanctn_no) {
+		this.sanctn_no = sanctn_no;
+	}
+	public int getRec_empno() {
+		return rec_empno;
+	}
+	public void setRec_empno(int rec_empno) {
+		this.rec_empno = rec_empno;
+	}
+	public String getCoop_at() {
+		return coop_at;
+	}
+	public void setCoop_at(String coop_at) {
+		this.coop_at = coop_at;
+	}
+	
+}

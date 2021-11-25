@@ -1,0 +1,18 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import kr.or.gw.dto.EccstSanctnerVO;
+
+public interface ScnerService {
+	int selectSeqNextVal()throws SQLException;
+	
+	void insertSanctners(EccstSanctnerVO scnerVO)throws SQLException;
+	
+	List<EccstSanctnerVO> selectSanctners(String sanctn_no)throws SQLException;
+	
+	void updateSanctner(EccstSanctnerVO scnerVO)throws SQLException;
+	
+	void deleteSanctners(String sanctn_no)throws SQLException;
+}

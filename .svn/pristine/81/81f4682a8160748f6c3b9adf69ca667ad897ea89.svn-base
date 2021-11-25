@@ -1,0 +1,27 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import kr.or.gw.command.SearchCriteria;
+import kr.or.gw.dto.BbsCmpnyDsptchVO;
+import kr.or.gw.dto.DbxVO;
+
+public interface DbxService {
+	
+	// 목록조회	
+	Map<String,Object> getDbxList(SearchCriteria cri)throws SQLException;
+	
+	// 상세보기
+	DbxVO getDbx(String dbx_no)throws SQLException;	
+	DbxVO getDbxForModify(String dbx_no)throws SQLException;
+		
+	// 등록
+	void regist(DbxVO dbx)throws SQLException;
+		
+	// 수정
+	void modify(DbxVO dbx)throws SQLException;
+	
+	// 삭제
+	void remove(String dbx_no)throws SQLException;
+}

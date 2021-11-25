@@ -1,0 +1,68 @@
+package kr.or.gw.command;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import kr.or.gw.dto.JobRcvVO;
+
+public class JobShareCommand {
+
+	private String job_no;
+	private String rcver_empno;
+	private String rcver_empnm;
+	private int rcver_order;
+
+	public String getJob_no() {
+		return job_no;
+	}
+	public void setJob_no(String job_no) {
+		this.job_no = job_no;
+	}
+	public String getRcver_empno() {
+		return rcver_empno;
+	}
+	public void setRcver_empno(String rcver_empno) {
+		this.rcver_empno = rcver_empno;
+	}
+	public String getRcver_empnm() {
+		return rcver_empnm;
+	}
+	public void setRcver_empnm(String rcver_empnm) {
+		this.rcver_empnm = rcver_empnm;
+	}
+	public int getRcver_order() {
+		return rcver_order;
+	}
+	public void setRcver_order(int rcver_order) {
+		this.rcver_order = rcver_order;
+	}
+
+	public List<JobRcvVO> toJobRcvVO() {
+		List<JobRcvVO> jobList = new ArrayList<JobRcvVO>();
+		
+		String spl1 = this.job_no;
+		String spl2 = this.rcver_empno;
+		
+		String[] split1 = spl1.split(",");
+		String[] split2 = spl2.split(",");
+		
+		
+		for(int i=0; i<split2.length; i++) {
+			for(int j=0; j<split1.length; j++) {
+				JobRcvVO jrcv = new JobRcvVO();
+				jrcv.setJob_no(this.job_no);
+				jrcv.setRcver_empnm(this.rcver_empnm);
+				jrcv.setRcver_order(i);
+				
+				jrcv.setRcver_empno(Integer.parseInt(split2[i]));
+				jrcv.setJob_no(split1[j]);
+				jobList.add(jrcv);
+				
+			}
+		}
+		
+		return jobList;
+	}
+
+}
+

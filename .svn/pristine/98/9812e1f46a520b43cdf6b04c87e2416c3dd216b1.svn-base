@@ -1,0 +1,24 @@
+package kr.or.gw.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
+
+import kr.or.gw.command.SearchCriteria;
+import kr.or.gw.dto.BbsCtsnnbdVO;
+import kr.or.gw.dto.DclzMngtVO;
+import kr.or.gw.dto.OrgnztEmpMngtVO;
+
+
+public interface DclzDAO {
+	
+	List<DclzMngtVO> selectListDclz(int empno) throws SQLException;
+
+	List<DclzMngtVO> selectDclzCount(int empno) throws SQLException;
+	
+	List<OrgnztEmpMngtVO> selectDclzList(Map<String,String> paramMap) throws SQLException;
+
+//	int selectDbxCriteriaTotalCount(SearchCriteria cri) throws SQLException;
+
+
+}

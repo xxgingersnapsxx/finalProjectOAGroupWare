@@ -1,0 +1,23 @@
+package kr.or.gw.service;
+
+import java.sql.SQLException;
+
+import kr.or.gw.dto.DclzMngtVO;
+import kr.or.gw.dto.OrgnztEmpMngtVO;
+
+public interface MypageService {
+//	Map<String, String> selectCodeDcbyCodeNo(String code_cl) throws SQLException;
+	String selectCodeDcbyCodeNo(String code_cl) throws SQLException;
+	
+	// 출퇴근 시간 조회
+	public DclzMngtVO selectCheckInOutTime(int empno) throws SQLException;
+	
+	// 회원정보수정		
+	void modify(OrgnztEmpMngtVO emp) throws SQLException;
+	
+	// 회원 정보 조회
+	public OrgnztEmpMngtVO selectEmp(int empno) throws SQLException;
+	
+	// 비밀번호 수정
+	void pwModify(OrgnztEmpMngtVO emp) throws SQLException;
+}

@@ -1,0 +1,68 @@
+package kr.or.gw.dao;
+
+import java.sql.SQLException;
+import java.util.List;
+
+import org.apache.ibatis.session.RowBounds;
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.gw.command.tempstorageCriteria;
+import kr.or.gw.dto.EccstSanctnMngtVO;
+
+public class EscMngtDAOImpl implements EscMngtDAO {
+	
+	private SqlSession session;
+	public void setSqlSession(SqlSession session) {
+		this.session=session;
+	}
+
+	@Override
+	public List<EccstSanctnMngtVO> selectSearchEscMngtList(tempstorageCriteria cri) throws SQLException {
+
+		int offset = cri.getStartRowNum();
+		int limit = cri.getPerPageNum();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		List<EccstSanctnMngtVO> escMngtList = session.selectList("EscMngt-Mapper.selectSearchEscMngtList", cri, rowBounds);
+		
+		return escMngtList;
+	}
+
+	@Override
+	public int selectSearchEscMngtListCount(tempstorageCriteria cri) throws SQLException {
+		
+		int count = session.selectOne("EscMngt-Mapper.selectSearchEscMngtListCount", cri);
+		return count;
+	}
+
+	@Override
+	public EccstSanctnMngtVO selectEscMngtByNo(String sanctn_no) throws SQLException {
+		EccstSanctnMngtVO escMngt = session.selectOne("EscMngt-Mapper.selectEscMngtByNo", sanctn_no);
+		return escMngt;
+	}
+
+	@Override
+	public void updateEscMngt(EccstSanctnMngtVO EscMngt) throws SQLException {
+		session.update("EscMngt-Mapper.updateEscMngt", EscMngt);
+	}
+
+	@Override
+	public void deleteEscMngt(String sanctn_no) throws SQLException {
+		session.update("EscMngt-Mapper.deleteEscMngt", sanctn_no);
+	}
+
+	@Override
+	public EccstSanctnMngtVO selectEscMngtPlusErf(String sanctn_no) throws SQLException {
+		
+		EccstSanctnMngtVO escMngt = session.selectOne("EscMngt-Mapper.selectEscMngtPlusErf", sanctn_no);
+		return escMngt;
+	}
+
+	@Override
+	public List<EccstSanctnMngtVO> selectEscMngtList() throws SQLException {
+		List<EccstSanctnMngtVO> escMngtList = session.selectList("EscMngt-Mapper.selectEscMngtList");
+		return escMngtList;
+	}
+
+
+}

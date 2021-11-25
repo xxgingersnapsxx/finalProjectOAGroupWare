@@ -1,0 +1,57 @@
+package kr.or.gw.dto;
+
+
+/**
+ * @author 장하늘
+ * 결재권자VO
+ */
+
+public class EccstSanctnerVO {
+	
+	private String sanctn_no; //결재번호
+	private String form_no; //양식번호
+	private int empno; //사번
+	private String sanctner_info; //결재선정보
+	private String sanctn_at; //결재여부
+	private String last_sanctner_confm_at; //최종결재권자승인여부
+	
+	public String getSanctn_no() {
+		return sanctn_no;
+	}
+	public void setSanctn_no(String sanctn_no) {
+		this.sanctn_no = sanctn_no;
+	}
+	public String getSanctner_info() {
+		return sanctner_info;
+	}
+	public void setSanctner_info(String sanctner_info) {
+		this.sanctner_info = sanctner_info;
+	}
+	public String getSanctn_at() {
+		return sanctn_at;
+	}
+	public void setSanctn_at(String sanctn_at) {
+		this.sanctn_at = sanctn_at;
+	}
+	public String getForm_no() {
+		return form_no;
+	}
+	public void setForm_no(String form_no) {
+		this.form_no = form_no;
+	}
+	public int getEmpno() {
+		return empno;
+	}
+	public void setEmpno(int empno) {
+		this.empno = empno;
+	}
+	public String getLast_sanctner_confm_at() {
+		return last_sanctner_confm_at;
+	}
+	public void setLast_sanctner_confm_at(String last_sanctner_confm_at) {
+		this.last_sanctner_confm_at = last_sanctner_confm_at;
+	}
+	
+	
+
+}

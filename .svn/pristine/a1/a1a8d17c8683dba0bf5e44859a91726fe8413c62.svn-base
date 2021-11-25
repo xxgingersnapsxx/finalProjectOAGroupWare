@@ -1,0 +1,7 @@
+package kr.or.gw.dao;
+
+import java.sql.SQLException;
+
+public interface MypageDAO {
+	public String selectCodeDcbyCodeNo(String code_no) throws SQLException;
+}

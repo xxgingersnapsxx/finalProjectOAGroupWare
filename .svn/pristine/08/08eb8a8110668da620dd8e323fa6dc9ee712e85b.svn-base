@@ -1,0 +1,22 @@
+package kr.or.gw.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/approval/settings")
+public class ApprovalSettingController {
+
+	@RequestMapping("")
+	public String setting() {
+		String url = "/approval/settings/settings";
+		return url;
+	}
+
+	@RequestMapping("/sign")
+	public String sign() {
+		String url = "/approval/settings/sign";
+		return url;
+	}
+
+}

@@ -1,0 +1,456 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="now" value="<%=new java.util.Date()%>" />
+<c:set var="sysYear"><fmt:formatDate value="${now}" pattern="yyyy-MM-dd" /></c:set>
+<c:set var="dbxList" value="${dataMap.dbxList }" />
+<c:set var="dbxAllList" value="${dataMap.dbxAllList }" />
+
+<head>
+<!-- summernote -->
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/bootstrap/plugins/summernote/summernote-bs4.css">
+
+<!-- notice_registForm.css -->
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/css/board/notice_registForm.css">
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/css/board/notice.css">
+
+<!-- 폰트 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway+Dots&display=swap" rel="stylesheet">
+<style>
+p.title-p {
+  display:inline;
+  font-size: 14px;
+  vertical-align: middle;
+}
+.fa-share-alt-square {
+  vertical-align: middle;
+}
+#removeBtn {
+  border: 1px solid lightgrey;
+  font-size: 12px;
+  padding: 3px 5px;
+}
+.table {
+  vertical-align: middle;
+  font-size: 12px;
+}
+.table th, .table td {
+  padding: 8px 10px;
+}
+.share-doc-div {
+  float: right;
+}
+#shareDocBtn {
+  width: 100px;
+  height: 32px;
+  font-size: 11px;
+}
+.scroll-div {
+  overflow:scroll; 
+  height:220px; 
+  overflow-x:hidden; 
+  border: 2px solid #EFEFEF;
+}
+#notShareBtn {
+  background: #EFEFEF;
+  color: #556278;
+  border: 2px solid #EFEFEF;
+  cursor: default;
+}
+
+
+/* 모달 */
+#sel_sanctner {
+	display: none;
+	width: 700px;
+	height: 500px;
+	padding: 0;
+	background-color: #fefefe;
+	border: 1px solid #888;
+	border-radius: 3px;
+}
+#sel_sanctner .modal_close_btn {
+	position: absolute;
+	top: 13px;
+	right: 10px;
+	cursor: pointer;
+	color: white;
+}
+.container-div {
+  height: 360px;
+  margin: 20px 15px;
+  padding: 20px 10px;
+}
+header {
+  padding:12px;
+  background: #004680;
+  height: 45px;
+  font-family: 'Do Hyeon', sans-serif;
+  font-size: 16px;
+  color: white;
+}
+.container-footer {
+  text-align: center;
+}
+/* 버튼 */
+.btn-regist {
+  background: #004680;
+  color: white;
+  width: 90px;
+  padding: 6px;
+  border: 2px solid #004680;
+  border-radius: 0;
+  height: 34px;
+  font-size: 13px;
+  font-weight: bold;
+}
+.btn-cancle {
+  background: #EFEFEF;
+  color: #556278;
+  width: 90px;
+  padding: 6px;
+  border: 2px solid #EFEFEF;
+  border-radius: 0;
+  height: 34px;
+  font-size: 13px;
+  font-weight: bold;
+}
+.btn-regist:hover {
+  background: white;
+  color: #59BEE9;
+}
+.btn-cancle:hover {
+  background: #F7F6ED;
+  color: tomato;
+}	
+</style>
+
+
+</head>
+
+<body>
+
+  <div id="sel_sanctner" >
+		<header>
+			<p>공유할 문서</p>
+			<a class="modal_close_btn"><i class="fa fa-window-close fa-lg" aria-hidden="false"></i></a>
+		</header>
+		
+		
+		<div class="container-div">
+		
+			<form name="chxForm" action="modalDoc.do" method="POST">
+			
+				<div class="wrapper">
+				    
+				   <table class="table text-center" >					
+						<tr>
+							<th style="width:8%;"></th>
+							<th style="width:8%;">번 호</th>
+							<th>제 목</th>
+							<th style="width:15%;">첨부파일</th>
+							<th style="width:15%;">작성자</th>
+						</tr>			
+						<c:if test="${empty dbxAllList }" >
+							<tr>
+								<td colspan="5">
+									<br/><br/><br/><br/><br/>
+									<i class="fa fa-times fa-2x" aria-hidden="true"></i><br/><br/>
+									<strong>공유할 문서가 없습니다.</strong>
+								</td>
+							</tr>
+						</c:if>		
+						<c:if test="${not empty dbxAllList }" >
+						<c:forEach items="${dbxAllList}" var="dbxAll">
+							<tr style='font-size:0.85em;'>
+								<td><input type="checkbox" name="chx" value="${dbxAll.dbx_no}"></td>
+								<td>${fn:substring(dbxAll.dbx_no,4,1000000000) }</td>
+								<td id="boardTitle" >
+									<span class="col-sm-12">${dbxAll.sj}</span>
+								</td>
+								<td></td>
+								<td>${dbxAll.emp_nm}</td>
+							</tr>
+						</c:forEach>
+						</c:if>
+					</table>	 
+				    
+				</div>
+				
+			</form>
+			
+			
+		</div>
+		
+		<div class="container-footer">
+			<button class="btn btn-regist" type="button" onclick="modalDoc_go()">
+			  <p>확인</p>
+			</button>
+			<button class="btn btn-cancle docModal" type="button">
+			  취소
+			</button>
+		</div>
+		
+		
+	</div>
+<script>
+function modalDoc_go(){
+	// checked 된 input의 dbx_no 가져오기
+// 	$("input:checkbox[name=chx]:checked").each(function(){
+// 		var chxNum = $(this).val();
+// 		console.log(chxNum);
+// 	});
+	
+	document.chxForm.submit();
+}
+</script>
+
+  <div class="pop-container" style="min-width:800px;">
+	 <!-- Main content -->
+	<section class="content-header">
+	  	<div class="container-fluid">
+	  		<div class="row md-2">
+	  			<div class="col-sm-6">
+	  				<i class="fa fa-share-alt-square fa-lg" aria-hidden="true"></i>
+	  				&nbsp;<p class="title-p">공유하기</p>  				
+	  			</div>
+	  		</div>
+	  	</div>
+	</section>
+	 
+  <!-- Main content -->
+    <section class="content container-fluid">
+		<div class="row justify-content-center">
+			<div class="col-md-12" style="max-width:960px;">
+				<div class="card-outline">
+					
+					<div class="card-body pad">
+		  			    <div class="share-doc-div">
+						  <button type="button" class="btn btn-regist" id="shareDocBtn" 
+						  			onclick="sanctner();">
+						  <i class="fa fa-plus-circle fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;공유할 문서</button>
+					    </div>
+					
+					<br/><br/>
+					
+						<form enctype="multipart/form-data" role="form" method="post" action="share.do" name="shareForm">
+							<input type="hidden" id="empno" readonly name="empno" class="form-control" value="${loginUser.empno }">
+							<div class="scroll-div">
+							<table class="table text-center" >					
+								<tr>
+									<th style="width:8%;">번 호</th>
+									<th style="width:45%;">제 목</th>
+									<th style="width:10%;">첨부파일</th>
+									<th style="width:15%;">작성자</th>
+									<th style="width:10%;">비고</th>
+								</tr>			
+								<c:if test="${empty arr }" >
+									<tr>
+										<td colspan="5">
+											<br/><br/>
+											<i class="fa fa-times fa-2x" aria-hidden="true"></i><br/><br/>
+											<strong>공유할 문서가 없습니다.</strong>
+										</td>
+									</tr>
+								</c:if>		
+								<c:if test="${not empty arr }" >
+								  <c:forEach items="${arr }" var="arr"  varStatus="status">
+								  
+								  	
+									  <c:forEach items="${dbxAllList }" var="dbxAll">
+									  		
+										<c:if test="${arr eq dbxAll.dbx_no }" >
+										
+												<tr style='font-size:0.85em;'>
+													<td>${fn:substring(dbxAll.dbx_no,4,1000000000) }</td>
+													<td id="boardTitle" >
+														<span class="col-sm-12">${dbxAll.sj}</span>
+													</td>
+													<td></td>
+													<td>${dbxAll.emp_nm}</td>							
+													<td>
+													<button type="button" id="removeBtn" class="btn btn-remove" 
+												    		onclick="">삭제</button>
+													</td>		
+												</tr>
+										</c:if>
+									  </c:forEach>
+								
+								
+								  </c:forEach>
+								</c:if>
+							</table>				
+							</div>
+							
+						</form>
+						
+						<br/>
+						<div class="share-doc-div">
+						  <button type="button" class="btn btn-regist" id="shareDocBtn" onclick="">
+						  <i class="fa fa-user-plus fa-lg" aria-hidden="true"></i>&nbsp;&nbsp;공유할 사람</button>
+					    </div>
+						
+						<br/><br/>
+						
+						  <div class="scroll-div">
+							<table class="table text-center" >					
+								<tr>
+									<th style="width:33%;">이 름</th>
+									<th style="width:34%;">부 서</th>
+									<th style="width:33%;">직 급</th>
+								</tr>			
+								<c:if test="${empty dbxList }" >
+									<tr>
+										<td colspan="5">
+											<br/><br/>
+											<i class="fa fa-times fa-2x" aria-hidden="true"></i><br/><br/>
+											<strong>공유할 사람이 없습니다.</strong>
+										</td>
+									</tr>
+								</c:if>		
+								<c:if test="${not empty dbxList }" >
+									<tr style='font-size:0.85em;'>
+										<td></td>
+										<td></td>
+										<td></td>		
+									</tr>
+								</c:if>
+							</table>	
+						  </div>
+						
+						
+					</div><!--end card-body  -->
+					
+					<br/><br/><br/><br/>
+					
+					<div class="card-header">
+					    <c:if test="${empty dbxList }" >
+							<div style="text-align: center; margin-bottom: 20px;">
+								<button type="button" class="btn btn-regist" id="notShareBtn">공유하기</button>
+								
+								<button type="button" class="btn btn-cancle" id="cancelBtn" onclick="CloseWindow();" >취 소</button>
+							</div>
+					    </c:if>
+					
+						<c:if test="${not empty dbxList }" >
+							<div style="text-align: center; margin-bottom: 20px;">
+								<button type="button" class="btn btn-regist" id="shareBtn" onclick="share_go();">공유하기</button>
+								
+								<button type="button" class="btn btn-cancle" id="cancelBtn" onclick="CloseWindow();" >취 소</button>
+							</div>
+						</c:if>
+					</div><!--end card-header  -->
+					
+					
+					<div class="card-footer" style="display:none">
+					
+					</div><!--end card-footer  -->
+				</div><!-- end card -->				
+			</div><!-- end col-md-12 -->
+		</div><!-- end row -->
+    </section>
+    <!-- /.content -->
+
+  </div>  
+<script>
+window.onload=function(){
+	Summernote_start($('#cn'));
+	$('.fileInput').on('change','input[type="file"]',function(event){
+		if(this.files[0].size>1024*1024*40){
+			alert("파일용량이 40MB를 초과하였습니다.");
+			this.value="";
+			$(this).click();
+			return false;
+		}
+	});
+	
+	$('div.fileInput').on('click','div.inputRow > button',function(event){
+		$(this).parent('div.inputRow').remove();
+	});
+}
+</script>
+<%@ include file="/WEB-INF/views/common/summernote.jsp" %>
+
+<script>
+function addFile_go(){
+//	alert("add file btn");
+
+	if($('input[name="uploadFile"]').length >= 5){ //선택자가 동일한 ㅁ ㅏ크업이있으면 제이쿼리는 배열로 가져온다... 그리고 이건 태그갯수확인
+		alert("파일추가는 5개까지만 가능합니다.");
+		return
+	}
+	
+	
+	var input= $('<input>').attr({"type":"file","name":"uploadFile"}).css("display","inline");
+	var div = $('<div>').addClass("inputRow");
+	div.append(input).append("<button style='border:0;'outline:0;' class='badge bg-red' type='button'>X</button>");
+	$('.fileInput').append(div);
+}	
+
+function share_go(){
+	document.shareForm.submit();	
+}
+
+</script>
+<script>
+function modal(id) {
+	var zIndex = 9999;
+	var modal = $('#' + id);
+	// 만지지마 화면 중앙에 비치하는거임
+
+	// 모달 div 뒤에 희끄무레한 레이어
+	var bg = $('<div>').css({
+		position : 'fixed',
+		zIndex : zIndex,
+		left : '0px',
+		top : '0px',
+		width : '100%',
+		height : '100%',
+		overflow : 'auto',
+		// 레이어 색갈은 여기서 바꾸면 됨
+		backgroundColor : 'rgba(0,0,0,0.4)'
+	}).appendTo('body');
+
+	modal
+		.css(
+			{
+			position : 'fixed',
+			boxShadow : '0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19)',
+
+			// 시꺼먼 레이어 보다 한칸 위에 보이기
+			zIndex : zIndex + 1,
+
+			// div center 정렬
+			top : '50%',
+			left : '50%',
+			transform : 'translate(-50%, -50%)',
+			msTransform : 'translate(-50%, -50%)',
+			webkitTransform : 'translate(-50%, -50%)'
+			}).show()
+			// 닫기 버튼 처리, 시꺼먼 레이어와 모달 div 지우기
+			.find('.modal_close_btn, .docModal').on('click', function() {
+				bg.remove();
+				modal.hide();
+			});
+	}
+
+
+function sanctner(){
+	modal('sel_sanctner');
+}
+</script>
+
+
+</body>
+
+    
+    
+    
+    

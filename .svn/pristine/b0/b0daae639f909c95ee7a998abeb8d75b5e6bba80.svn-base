@@ -1,0 +1,51 @@
+package kr.or.gw.controller;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+@RequestMapping("/approval/adbox")
+public class ApprovalAdboxController {
+	
+	@RequestMapping("/request")
+	public String reqt() {
+		String url = "/approval/adbox/request";
+		return url;
+	}
+	@RequestMapping("/requestList")
+	public String reqtList() {
+		String url = "/approval/adbox/requestList";
+		return url;
+	}
+	
+	@RequestMapping("/requestGrid")
+	public String reqtGrid() {
+		String url = "/approval/adbox/requestGrid";
+		return url;
+	}
+	
+	@RequestMapping("/wait")
+	public String apwait() {
+		String url = "/approval/adbox/wait";
+		
+		return url;
+	}
+	
+	
+	@RequestMapping("/reject")
+	public String reject() {
+		String url = "/approval/adbox/reject";
+		
+		return url;
+	}
+
+	
+	@RequestMapping("/completion")
+	public String completion() {
+		String url = "/approval/adbox/completion";
+		
+		return url;
+	}
+	
+	
+}

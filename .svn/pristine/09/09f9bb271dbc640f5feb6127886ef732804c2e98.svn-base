@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="EccstLNBkmk-Mapper">
+
+	<select id="selectBkmkList" resultType="ebkmk">
+        select * from
+        eccst_bkmk_sanctn_ln
+        where rgstr_empno = #{rgstr_empno}	
+	</select>
+	
+	<select id="selectBkmkListDetail" resultType="ebkmk">
+        select * from
+        eccst_bkmk_sanctn_ln
+        where rgstr_empno = #{rgstr_empno} and bkmk_gr = #{bkmk_gr}
+	</select>
+	
+	<update id="deleteBkmk" parameterType="ebkmk">
+		delete from eccst_bkmk_sanctn_ln where bkmk_gr = #{bkmk_gr}
+	</update>
+	
+	<update id="insertBkmk" parameterType="ebkmk"> 
+		insert into
+        eccst_bkmk_sanctn_ln
+        values(CONCAT('LNBM',  ECCST_BKMK_SANCTN_LN_SEQ.nextval),#{rgstr_empno},#{save_empno},#{form_no},#{ln_no},#{bkmk_gr})
+	</update>
+
+	<select id="selectBkmkGrMaxValue" resultType="int">
+	 	select max(bkmk_gr) from eccst_bkmk_sanctn_ln
+	</select>
+
+</mapper>

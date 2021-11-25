@@ -1,0 +1,84 @@
+package kr.or.gw.controller;
+
+import java.io.PrintWriter;
+import java.sql.SQLException;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import kr.or.gw.dto.OrgnztEmpMngtVO;
+import kr.or.gw.service.ApprovalSettingService;
+
+@Controller
+@RequestMapping("/approval/settings")
+public class ApprovalSettingController {
+
+	@Autowired
+	ApprovalSettingService approvalSettingService;
+	
+	@RequestMapping("")
+	public String setting() {
+		String url = "/approval/settings/settings";
+		return url;
+	}
+
+	@RequestMapping("/sign")
+	public String sign() {
+		String url = "/approval/settings/sign";
+		return url;
+	}
+//	
+//	@RequestMapping(value="approvalPassword.do" , method = RequestMethod.POST)
+//	public String approvalPassword(String sanctn_password,
+//				RedirectAttributes rttr)  throws SQLException{
+//		String url = "/approval/settings/approvalPassword";
+//		
+//		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+//	    HttpSession session = request.getSession();
+//	    OrgnztEmpMngtVO emp = (OrgnztEmpMngtVO) session.getAttribute("loginUser");
+//
+//	    sanctn_password = request.getParameter("pw");
+//	    approvalSettingService.modify(emp);
+//	  
+//	    rttr.addFlashAttribute("empno",emp.getEmpno());
+//	    rttr.addFlashAttribute("sanctn_password",emp.getSanctn_password());
+//	    
+//
+//	    
+//		return url;
+//	}
+//	
+	@RequestMapping(value="/approvalPassword" , method = RequestMethod.GET)
+	public String approvalPassword(String sanctn_password,String password2,
+			RedirectAttributes rttr,HttpServletResponse response)  throws Exception{
+		
+		String url = "/approval/settings/approvalPassword";
+		
+		HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
+		HttpSession session = request.getSession();
+		OrgnztEmpMngtVO emp = (OrgnztEmpMngtVO) session.getAttribute("loginUser");
+		
+		 if(sanctn_password == null || sanctn_password.equals("")||password2 == null || password2.equals("")) {
+			 sanctn_password= "1234";
+		    } 
+		 
+		if(sanctn_password.equals(password2)) {
+		emp.setSanctn_password(sanctn_password);
+		approvalSettingService.modify(emp);
+		}
+		
+		rttr.addFlashAttribute("empno",emp.getEmpno());
+	
+		return url;
+	}
+
+}

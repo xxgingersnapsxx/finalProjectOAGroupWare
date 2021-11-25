@@ -1,0 +1,26 @@
+package kr.or.gw.controller;
+
+import java.sql.SQLException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import kr.or.gw.service.DbxService;
+
+@Controller
+public class DbxController {
+	
+	@Autowired
+	private DbxService dbxService;
+	
+	@RequestMapping("/document/main")
+	public ModelAndView main(ModelAndView mnv) throws SQLException {
+		String url = "document/main";
+		
+		mnv.setViewName(url);
+		return mnv;
+	}
+	
+}

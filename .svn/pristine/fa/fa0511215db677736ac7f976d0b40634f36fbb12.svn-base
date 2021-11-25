@@ -1,0 +1,164 @@
+package kr.or.gw.controller;
+
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import kr.or.gw.command.AllWorkCriteria;
+import kr.or.gw.command.MypageModifyCommand;
+import kr.or.gw.dto.DclzMngtVO;
+import kr.or.gw.dto.OrgnztEmpMngtVO;
+import kr.or.gw.service.JobService;
+import kr.or.gw.service.MypageService;
+
+
+
+@Controller
+@RequestMapping("/mypage")
+public class MyPageController {
+  
+	@Autowired
+	private MypageService mypageService;
+
+	@Autowired
+	private JobService jobService;
+
+	@RequestMapping("")
+	public String mypage(AllWorkCriteria cri, HttpSession session, Model model) throws SQLException {
+		String url = "/mypage/mypage";
+
+		int empno = ((OrgnztEmpMngtVO) session.getAttribute("loginUser")).getEmpno();
+
+		String clsf_code = ((OrgnztEmpMngtVO) session.getAttribute("loginUser")).getClsf_code();
+		String clsfName = mypageService.selectCodeDcbyCodeNo(clsf_code);
+
+		DclzMngtVO dclzmngt = mypageService.selectCheckInOutTime(empno);
+
+		Map<String, Object> jobSendList = jobService.getJobSendList(cri, empno);
+		Map<String, Object> jobRecList = jobService.getJobRecList(cri, empno);
+
+		model.addAttribute("clsfName", clsfName);
+		model.addAttribute("jobSendListDataMap", jobSendList); // 발신업무
+		model.addAttribute("jobRecListDataMap", jobRecList); // 수신업무
+		model.addAttribute("checkInOut", dclzmngt); // 출퇴근 시간
+
+		return url;
+	}
+
+	@RequestMapping(value = "/myPageDetails.do", method = RequestMethod.GET)
+	public String myPageDetails(HttpSession session, Model model) throws SQLException {
+		String url = "/mypage/myPageDetails";
+
+		OrgnztEmpMngtVO emp = (OrgnztEmpMngtVO) session.getAttribute("loginUser");
+
+		int empno = emp.getEmpno();
+		String clsf_code = ((OrgnztEmpMngtVO) session.getAttribute("loginUser")).getClsf_code();
+		String rspofc_code = ((OrgnztEmpMngtVO) session.getAttribute("loginUser")).getRspofc_code();
+		String dept_code = ((OrgnztEmpMngtVO) session.getAttribute("loginUser")).getDept_code();
+
+		String clsfName = mypageService.selectCodeDcbyCodeNo(clsf_code);
+		String rspofcName = mypageService.selectCodeDcbyCodeNo(rspofc_code);
+		String deptName = mypageService.selectCodeDcbyCodeNo(dept_code);
+		
+		String cttpc = mypageService.selectEmp(empno).getCttpc();
+		String email_adres = mypageService.selectEmp(empno).getEmail_adres();
+		
+//		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+//		System.out.println(cttpc);
+//		System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		
+		model.addAttribute("clsfName", clsfName);
+		model.addAttribute("rspofcName", rspofcName);
+		model.addAttribute("deptName", deptName);
+		model.addAttribute("cttpc", cttpc);
+		model.addAttribute("email_adres", email_adres);
+
+		return url;
+	}
+
+	@RequestMapping("/myPageDetailsModifyForm")
+	public String modifyForm(HttpSession session, Model model) throws SQLException {
+		OrgnztEmpMngtVO emp = (OrgnztEmpMngtVO) session.getAttribute("loginUser");
+
+		String url = "mypage/myPageDetailsModify";
+
+		int empno = emp.getEmpno();
+
+		String clsf_code = ((OrgnztEmpMngtVO) session.getAttribute("loginUser")).getClsf_code();
+		String rspofc_code = ((OrgnztEmpMngtVO) session.getAttribute("loginUser")).getRspofc_code();
+		String dept_code = ((OrgnztEmpMngtVO) session.getAttribute("loginUser")).getDept_code();
+
+		String clsfName = mypageService.selectCodeDcbyCodeNo(clsf_code);
+		String rspofcName = mypageService.selectCodeDcbyCodeNo(rspofc_code);
+		String deptName = mypageService.selectCodeDcbyCodeNo(dept_code);
+		String cttpc = mypageService.selectEmp(empno).getCttpc();
+		String email_adres = mypageService.selectEmp(empno).getEmail_adres();
+
+		model.addAttribute("clsfName", clsfName);
+		model.addAttribute("rspofcName", rspofcName);
+		model.addAttribute("deptName", deptName);
+		model.addAttribute("cttpc", cttpc);
+		model.addAttribute("email_adres", email_adres);
+
+		return url;
+
+	}
+
+	@RequestMapping(value = "/myPageDetailsModify", method = RequestMethod.POST)
+	public String sendModifyPost(MypageModifyCommand modifyReq, HttpSession session, RedirectAttributes rttr)
+			throws SQLException, IOException {
+		String url = "redirect:/mypage/myPageDetails.do";
+
+		int empno = ((OrgnztEmpMngtVO) session.getAttribute("loginUser")).getEmpno();
+
+		OrgnztEmpMngtVO emp = modifyReq.toOrgnztEmpMngtVO();
+
+		emp.setEmpno(empno);
+		
+//		System.out.println("==================================================================================================");
+//		System.out.println(emp.getEmail_adres());
+//		System.out.println(emp.getCttpc());
+//		System.out.println("==================================================================================================");
+
+		mypageService.modify(emp);
+
+		rttr.addFlashAttribute("from", "modify");
+
+		return url;
+	}
+
+	// 비밀번호 수정
+	@RequestMapping(value = "/pwModify", method = RequestMethod.POST)
+	public String sendPwModifyPost(MypageModifyCommand modifyReq, HttpSession session, RedirectAttributes rttr)
+			throws SQLException, IOException {
+		String url = "redirect:/mypage/myPageDetails.do";
+		
+		int empno = ((OrgnztEmpMngtVO) session.getAttribute("loginUser")).getEmpno();
+		
+		OrgnztEmpMngtVO emp = modifyReq.toOrgnztEmpMngtVO();
+		
+		emp.setEmpno(empno);
+		
+		mypageService.pwModify(emp);
+		
+		rttr.addFlashAttribute("from", "modify");
+		
+		System.out.println("==================================================================================================");
+		System.out.println(emp.getPassword());
+		System.out.println("==================================================================================================");
+//		
+		return url;
+	}
+	
+	
+	
+}

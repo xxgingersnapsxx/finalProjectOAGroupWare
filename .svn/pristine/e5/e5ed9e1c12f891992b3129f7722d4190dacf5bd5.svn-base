@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Dclz-Mapper">
+
+
+	<select id="selectListDclz" resultType="dclz">
+		select * 
+		from dclz_mngt
+		where empno = #{empno}
+	</select>
+	
+	
+	<select id="selectDclzCount" resultType="dclz">
+	
+		select count(sttus_code) from dclz_mngt where sttus_code = 'F001' and empno = #{empno} and to_char(#{rgsde}, 'yyyy-mm') = (select to_char(sysdate,'yyyy-mm') from dual)
+		union all
+		select count(sttus_code) from dclz_mngt where sttus_code = 'F002' and empno = #{empno} and to_char(#{rgsde}, 'yyyy-mm') = (select to_char(sysdate,'yyyy-mm') from dual)
+		union all
+		select count(sttus_code) from dclz_mngt where sttus_code = 'F003' and empno = #{empno} and to_char(#{rgsde}, 'yyyy-mm') = (select to_char(sysdate,'yyyy-mm') from dual)
+		union all
+		select count(sttus_code) from dclz_mngt where sttus_code = 'F004' and empno = #{empno} and to_char(#{rgsde}, 'yyyy-mm') = (select to_char(sysdate,'yyyy-mm') from dual)
+		
+	</select>	
+	<!-- 
+	<select id="" resultType="int">
+        select lvffc_time - attend_time,
+        ROUND((lvffc_time - attend_time) * 24 * 60, 2)
+        from dclz_mngt;	
+	</select> -->
+</mapper>

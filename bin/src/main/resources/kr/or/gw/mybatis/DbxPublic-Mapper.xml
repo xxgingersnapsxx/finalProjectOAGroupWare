@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="DbxPublic-Mapper">
+	
+	<sql id="search">
+		<if test="searchType == 't'.toString()">
+			and title like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'w'.toString()">
+			and writer like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'c'.toString()">
+			and content like '%'||#{keyword}||'%'			
+		</if>
+		<if test="searchType == 'tc'.toString()">
+			and (
+			title like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'cw'.toString()">
+			and (
+			writer like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+		<if test="searchType == 'tcw'.toString()">
+			and (
+			title like '%'||#{keyword}||'%'
+			or
+			writer like '%'||#{keyword}||'%'
+			or
+			content like '%'||#{keyword}||'%'						
+			)			
+		</if>
+	</sql>
+	<select id="selectSearchDbxList" resultType="dbx">
+		select
+		*
+		from
+		dbx
+		where dbx_no is not null
+		and dbx_se = 'E002'
+		<include refid="search" />
+		order by dbx_no desc
+	</select>
+	
+	<select id="selectSearchDbxListCount" resultType="int">
+		select
+		count(*)
+		from
+		dbx
+		where dbx_no is not null
+		and dbx_se = 'E002'			  	
+		<include refid="search" />
+		order by dbx_no desc
+	</select>
+	
+	<select id="selectDbxList" resultType="dbx">
+		select * 
+		from dbx
+		where dbx_se = 'E002'
+		order by dbx_no desc		
+	</select>
+	
+	<select id="selectDbxByDbxno" parameterType="str" resultType="dbx">
+		select * 
+		from dbx
+		where dbx_no=#{dbx_no}
+		and dbx_se = 'E002'
+	</select>
+	
+	<update id="insertDbx" parameterType="dbx">
+		insert 
+		into
+		dbx(dbx_no,empno,dbx_se,sj,rgsde,emp_nm,cn)
+		values
+		(#{dbx_no},#{empno},'E002',#{sj},sysdate,#{emp_nm},#{cn})
+	</update>
+	
+	<update id="updateDbx" parameterType="dbx">
+		update 
+		dbx 
+		set 
+		sj=#{sj}, cn=#{cn}
+		where dbx_no=#{dbx_no}
+	</update>
+	
+	<update id="deleteDbx" parameterType="str">
+		delete 
+		from dbx 
+		where dbx_no=#{dbx_no}
+		and dbx_se = 'E002'
+	</update>
+	
+
+	
+	<select id="selectDbxSeqNext" resultType="int">
+		select dbx_seq.nextval as dbx_no from dual
+	</select>
+</mapper>
+
+
+
+
+
+
+
+

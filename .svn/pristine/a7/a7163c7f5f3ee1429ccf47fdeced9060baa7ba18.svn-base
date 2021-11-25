@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="Mypage-Mapper">
+
+	<select id="selectCodeDcbyCodeNo" parameterType="str" resultType="str">
+		select code_dc
+		from code
+		where code_no = #{code_no}		
+	</select>
+
+	<select id="selectEmp" parameterType="int" resultType="emp">
+		select * 
+		from ORGNZT_EMP_MNGT
+		where empno=#{empno}
+	</select>
+
+	<select id="selectCheckInOutTime" parameterType="int" resultType="dclz">
+		select *
+		from dclz_mngt
+		where empno = #{empno}
+		<!-- and to_char(attend_time, 'yyyymmdd') = '20211025' -->	
+		and to_char(attend_time, 'yyyymmdd') = sysdate(attend_time, 'yyyymmdd')	
+	</select>
+
+	<update id="modifyEmp" parameterType="emp">
+		update orgnzt_emp_mngt 
+		set 
+		email_adres=#{email_adres},cttpc=#{cttpc}
+		where empno=#{empno}
+	</update>
+
+	<update id="pwModify" parameterType="emp">
+		update orgnzt_emp_mngt 
+		set 
+		password=#{password}
+		where empno=#{empno}
+	</update>
+	
+	<!-- 이번 달 근태 상태별 횟수 조회 -->
+	<!-- 지각 -->
+	<select id="selectDclzMngtLateCount" parameterType="int" resultType="int">
+		select count(*) 
+		  from dclz_mngt
+		 where empno = #{empno}
+		   and to_char(attend_time, 'MM') = to_char(sysdate, 'MM')
+		   and sttus_code = 'F005'
+	</select>
+	<!-- 결근 -->
+	<select id="selectDclzMngtAbsentCount" parameterType="int" resultType="int">
+		select count(*) 
+		  from dclz_mngt
+		 where empno = #{empno}
+		   and to_char(attend_time, 'MM') = to_char(sysdate, 'MM')
+		   and sttus_code = 'F003'
+	</select>
+	<!-- 조기퇴근 -->
+	<select id="selectDclzMngtEarlieCkOutCount" parameterType="int" resultType="int">
+		select count(*) 
+		  from dclz_mngt
+		 where empno = #{empno}
+		   and to_char(attend_time, 'MM') = to_char(sysdate, 'MM')
+		   and sttus_code = 'F002'
+	</select>
+	<!-- 퇴근 미체크 -->
+	<select id="selectDclzMngtMissingCount" parameterType="int" resultType="int">
+		select count(*) 
+		  from dclz_mngt
+		 where empno = #{empno}
+		   and to_char(attend_time, 'MM') = to_char(sysdate, 'MM')
+		   and sttus_code = 'F004'
+	</select>
+	<!-- 정상출근 -->
+	<select id="selectDclzMngtWorkingDayCount" parameterType="int" resultType="int">
+		select count(*) 
+		  from dclz_mngt
+		 where empno = #{empno}
+		   and to_char(attend_time, 'MM') = to_char(sysdate, 'MM')
+		   and sttus_code = 'F001'
+	</select>
+	
+	<!-- 이번 달 근무 시간 및 분 -->
+	<!-- 여기 수정하기 resultType -->
+	<select id="selectDclzMngtWorkingHrs" parameterType="int" resultType="int">
+		select sum(floor((LVFFC_TIME-attend_time) * 24)) as hrs
+	     , sum(floor((LVFFC_TIME-attend_time) * 24 * 60)) - (sum(floor((LVFFC_TIME-attend_time) * 24)) * 60) as min 
+		  from dclz_mngt
+		 where empno = #{empno}
+		   and to_char(attend_time, 'MM') = to_char(sysdate, 'MM');
+	</select>
+</mapper>
+
+
+
+
+
+
+
+

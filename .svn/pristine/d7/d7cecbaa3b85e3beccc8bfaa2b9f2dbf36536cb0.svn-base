@@ -1,0 +1,46 @@
+package kr.or.gw.controller;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import kr.or.gw.dto.OrgnztEmpMngtVO;
+import kr.or.gw.service.MypageService;
+
+@Controller
+@RequestMapping("/mypage")
+public class MyPageController {
+	
+	@Autowired
+	private MypageService mypageService;
+
+	@RequestMapping("")
+	public String mypage(HttpSession session, Model model) throws SQLException{
+		String url = "/mypage/mypage";
+		String code_cl = ((OrgnztEmpMngtVO)session.getAttribute("loginUser")).getClsf_code();
+//		Map<String, String> dataMap = mypageService.selectCodeDcbyCodeNo(code_cl);
+		String codeDc = mypageService.selectCodeDcbyCodeNo(code_cl);
+		System.out.println(model.addAttribute("codeDc",codeDc));
+		model.addAttribute("codeDc",codeDc);
+		return url;
+	}
+
+	@RequestMapping(value = "/myPageDetails.do", method = RequestMethod.GET)
+	public String myPageDetails() {
+		String url = "/mypage/myPageDetails";
+		return url;
+	}
+
+	@RequestMapping(value = "/myPageDetailsModify")
+	public String modifyForm() {
+		String url = "mypage/myPageDetailsModify";
+		return url;
+	}
+}

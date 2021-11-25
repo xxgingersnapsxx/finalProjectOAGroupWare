@@ -1,0 +1,97 @@
+package kr.or.gw.controller;
+
+import java.sql.SQLException;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import kr.or.gw.command.DbxPublicRegistCommand;
+import kr.or.gw.command.basicCriteria;
+import kr.or.gw.dto.DbxVO;
+import kr.or.gw.service.DbxPublicService;
+
+@Controller
+@RequestMapping("/document")
+public class DbxPublicController {
+	
+	@Autowired
+	private DbxPublicService dbxPublicService;
+	
+	@RequestMapping("/public")
+	public ModelAndView list(basicCriteria cri, ModelAndView mnv) throws SQLException {
+		String url = "document/public/list";
+		
+		Map<String, Object> dataMap = dbxPublicService.getDbxList(cri);
+		
+		mnv.addObject("dataMap", dataMap);
+		mnv.setViewName(url);
+		
+		return mnv;
+	}
+
+	@RequestMapping("/public/registForm")
+	public String registForm() {
+		String url = "document/public/regist";
+		return url;
+	}
+	
+	@RequestMapping(value="/public/regist", method=RequestMethod.POST, produces="text/plain;charset=utf-8")
+	public String regist(DbxPublicRegistCommand regReq,
+							HttpServletRequest request,
+							RedirectAttributes rttr) throws Exception {
+		String url = "redirect:/document/public";
+		
+		DbxVO dbx = regReq.toDbsVO();
+		
+		dbx.setSj((String)request.getAttribute("XSSsj"));
+		
+		dbxPublicService.regist(dbx);
+		
+		rttr.addFlashAttribute("from", "regist");
+		
+		return url;
+	}
+
+	
+	@RequestMapping("/public/detail")
+	public ModelAndView detail(String dbx_no, String from, ModelAndView mnv) throws SQLException {
+		String url = "document/public/detail";
+		
+		DbxVO dbx = null;
+		
+		if (from!=null && from.equals("list")) {
+			dbx = dbxPublicService.getDbx(dbx_no);
+			url = "redirect:/document/public/detail.do?dbx_no=" + dbx_no;
+		} else {
+			dbx = dbxPublicService.getDbxForModify(dbx_no);
+		}
+		
+		mnv.addObject("dbx", dbx);
+		mnv.setViewName(url);
+		
+		return mnv;
+		
+	}
+	
+	@RequestMapping(value="/public/remove", method=RequestMethod.POST)
+	public String remove(String dbx_no, RedirectAttributes rttr) throws Exception {
+		String url = "redirect:/document/public/detail.do?dbx_no="+dbx_no;
+		
+		dbxPublicService.remove(dbx_no);
+		
+		rttr.addAttribute("dbx_no", dbx_no);
+		rttr.addFlashAttribute("from", "remove");
+		
+		return url;
+		
+	}
+	
+	
+}

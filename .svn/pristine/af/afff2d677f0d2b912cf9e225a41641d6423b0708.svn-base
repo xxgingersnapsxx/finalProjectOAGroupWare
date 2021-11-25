@@ -1,0 +1,13 @@
+package kr.or.gw.service;
+
+import kr.or.gw.dao.DclzVacDAO;
+
+public class DclzVacServiceImpl implements DclzVacService{
+	
+	private DclzVacDAO dclzVacDAO;
+	
+	public void setDclzVacDAO(DclzVacDAO dclzVacDAO) {
+		this.dclzVacDAO = dclzVacDAO;
+	}
+	
+}

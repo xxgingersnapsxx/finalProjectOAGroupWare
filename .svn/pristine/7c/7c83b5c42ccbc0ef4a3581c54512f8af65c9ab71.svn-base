@@ -1,0 +1,219 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ page trimDirectiveWhitespaces="true" %>	    
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
+<c:set var="pageMaker" value="${dataMap.pageMaker }" />
+<c:set var="cri" value="${dataMap.pageMaker.cri }" />
+<c:set var="vacList" value="${dataMap.vacList }" />
+
+<%
+session.setAttribute("path", request.getContextPath() + "/attendance/vacation");
+%>
+
+<head>
+<link rel="stylesheet" href="<%=request.getContextPath() %>/resources/css/board/notice.css">
+<!-- 폰트 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Do+Hyeon&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Raleway+Dots&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+
+<style>
+.card-body{
+	height:350px;
+}
+
+.card-header{
+	margin-top:10px;
+}
+
+</style>
+
+</head>
+
+<title>휴가 관리</title>
+
+
+<body>
+	 <!-- Main content -->
+	<section class="content-header">
+	  	<div class="container-fluid">
+	  		<div class="row md-2">
+	  			<div class="col-sm-6">
+	  				<i class="fa fa-file-text-o fa-lg" aria-hidden="true"></i>
+	  				<p class="menu-header">근태</p>
+	  				<p class="menu-header">></p>
+	  				<p class="menu-header">개인근태</p>
+	  				<p class="menu-header">></p>
+	  				<p class="menu-header this">휴가 관리</p>  				
+	  			</div>
+
+	  		</div>
+	  	</div>
+	</section>
+	 <br>
+	 <br>
+	 <!-- Main content -->
+	<div class="row">
+		<div class="col-md-5 col-12 card" style="padding:30px; margin-left:60px;">
+			<header style="text-align:center;">
+				<h4>
+					연차
+				</h4>
+			</header>
+				<c:forEach items="${vacList}" var="vac">
+				<h5>
+					총 휴가 일수 :	${vac.tot_vcatn_daycnt}
+				</h5>
+				<h5>
+					사용 휴가 일수 :	${vac.use_vcatn_daycnt}
+				</h5>
+				
+				<fmt:parseNumber var="i" type="number" value="${vac.tot_vcatn_daycnt}" />
+				<fmt:parseNumber var="j" type="number" value="${vac.use_vcatn_daycnt}" />
+				<h5>남은 휴가 일수 :	<c:out value="${i-j}" />
+								
+				</h5>
+				</c:forEach>
+		</div>
+		<div class="col-md-5 col-12 card" style="padding:30px; margin-left:60px;">
+			<input type="button" id="button1" value="휴가 신청" onclick="vacRegist()">
+		</div>
+	</div>
+	
+	<div class="col-md-12 col-12"style="text-align:center; background: #293648; color: white;">
+		<span style="font-weight:bold; font-size:16px;">휴가 신청 내역</span>
+	</div>
+	<div class="row">
+		<div class="col-md-12 col-12">
+		    <section class="content">		
+				<div class="gw-card">
+					<div class="card-header with-border">
+						<div class="input-group row">
+							<div id="keyword" class="card-tools" style="width:540px;">
+								<div class="col-md-6">
+									<form method="get" action="VacCodeGo">
+										<input type="checkbox" name="vcatn_code" value="K001">연차
+										<input type="checkbox" name="vcatn_code" value="K002">오전 반차
+										<input type="checkbox" name="vcatn_code" value="K003">오후 반차
+										<input type="checkbox" name="vcatn_code" value="K004">병가
+									</form>
+								</div>
+								<div class="col-md-6">
+									<input class="form-control search-bar" type="text" name="keyword" placeholder="검색어를 입력하세요." value="${cri.keyword }"/>
+									<span class="input-group-append">
+										<button class="btn btn-basic" type="button" onclick="list_go3(1,'notice');" 
+										data-card-widget="search">
+											<i class="fa fa-fw fa-search"></i>
+										</button>
+									</span>
+								</div>
+							</div>
+						</div>						
+					</div>
+					<div class="card-body">
+						<table class="table text-center" >					
+							<tr style="font-size:0.95em;">
+								<th style="width:10%;">휴가종류</th>
+								<th style="width:45%;">제 목</th>
+								<th style="width:10%;">시작일</th>
+								<th style="width:10%;">종료일</th>
+								<th style="width:15%;">휴가자</th>
+								<th style="width:10%;">사용일수</th>
+							</tr>			
+							<c:if test="${empty vacList }" >
+								<tr>
+									<td colspan="5">
+										<strong>해당 내용이 없습니다.</strong>
+									</td>
+								</tr>
+							</c:if>						
+							<c:forEach items="${vacList}" var="vac">
+								<tr style='font-size:0.85em;'>
+									<td>
+										${vac.vcatn_code}코드이름
+									</td>
+									<td id="boardTitle" onclick="javascript:OpenWindow('vac/     ?vcatn_no=${vac.vcatn_no}','상세보기',900,800);">
+										<span class="col-sm-12">eccst.sj</span>
+									</td>
+									<td>
+										eccst.bgnde
+									</td>
+									<td>
+										eccst.endde
+									</td>
+									<td>
+										${vac.empnm}
+									</td>
+									<td>
+										<fmt:parseNumber var="j" type="number" value="${vac.use_vcatn_daycnt}" />
+										<c:set var="i" value="${j}"/>
+										<c:choose>
+											<c:when test="${i lt 1}">
+												${vac.use_vcatn_daycnt}
+											</c:when>
+											<c:when test="${i ge 1}">
+												${i}
+											</c:when>
+											<c:when test="${i eq 0}">
+												0
+											</c:when>
+										</c:choose>
+										
+									</td>
+								</tr>
+							</c:forEach>
+						</table>				
+					</div>
+					
+					<div class="card-footer">
+						<nav aria-label="pds list Navigation">
+							<ul class="pagination justify-content-center m-0">
+								<%@ include file="/WEB-INF/views/common/basic-pagination.jsp" %>	
+							</ul>
+						</nav>
+					</div>
+					
+					
+				
+				</div>
+			
+		    </section>
+	    </div>
+    </div>
+    <!-- /.content -->
+<script>
+function vacRegist(){
+	
+	OpenWindow('http://localhost/gw/approval/ddbox/registForm.do?form_no=erf2','기안작성',900,960);
+}
+</script>
+<script>
+function list_go3(page,url){
+	if(!url) url="vac.do";
+	
+	console.log("url : " + url);
+	
+	var jobForm=$('#basicForm');
+	
+	if(!page) page=1;
+	
+	console.log("page : " + page);
+	jobForm.find("[name='page']").val(page);
+	jobForm.find("[name='searchType']").val($('select[name="searchType"]').val());
+	jobForm.find("[name='keyword']").val($('div.input-group>input[name="keyword"]').val());
+	
+	jobForm.attr({
+		action:url,
+		method:'get'
+	}).submit();
+	
+}
+</script>
+</body>
+</html>

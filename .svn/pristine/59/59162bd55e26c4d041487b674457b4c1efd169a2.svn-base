@@ -1,0 +1,10 @@
+event.upload=c:/event/file/upload
+news.upload=c:/news/file/upload
+notice.upload=c:/notice/file/upload
+mngt.upload=c:/mngt/file/upload
+member.picture.upload=c:/member/picture/upload/
+error.log=c:/error_log/
+summernote.img=c:/attach/summernote/img
+login.user.log=c:/log/loginUser
+job.upload=c:/job/file/upload
+jobAns.upload=c:/jobAns/file/upload

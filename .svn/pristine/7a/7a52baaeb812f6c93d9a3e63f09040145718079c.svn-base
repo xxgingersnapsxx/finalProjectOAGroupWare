@@ -1,0 +1,71 @@
+package kr.or.gw.dao;
+
+import java.sql.SQLException;
+
+import org.apache.ibatis.session.SqlSession;
+
+import kr.or.gw.dto.BbsNtbdVO;
+import kr.or.gw.dto.DclzMngtVO;
+import kr.or.gw.dto.OrgnztEmpMngtVO;
+
+public class MypageDAOImpl implements MypageDAO {
+	private SqlSession session;
+
+	public void setSqlSession(SqlSession session) {
+		this.session = session;
+	}
+
+	@Override
+	public String selectCodeDcbyCodeNo(String code_no) throws SQLException {
+		String code_dc = session.selectOne("Mypage-Mapper.selectCodeDcbyCodeNo", code_no);
+		return code_dc;
+	}
+
+	@Override
+	public DclzMngtVO selectCheckInOutTime(int empno) throws SQLException {
+		DclzMngtVO dclzMngt = session.selectOne("Mypage-Mapper.selectCheckInOutTime", empno);
+
+		return dclzMngt;
+	}
+
+	@Override
+	public void modifyEmp(OrgnztEmpMngtVO emp) throws SQLException {
+		session.update("Mypage-Mapper.modifyEmp", emp);
+	}
+
+	@Override
+	public OrgnztEmpMngtVO selectEmp(int empno) throws SQLException {
+		OrgnztEmpMngtVO emp = session.selectOne("Mypage-Mapper.selectEmp", empno);
+		return emp;
+	}
+
+	@Override
+	public void pwModify(OrgnztEmpMngtVO emp) throws SQLException {
+		session.update("Mypage-Mapper.pwModify", emp);
+	}
+
+	@Override
+	public int selectDclzMngtLateCount(int empno) throws SQLException {
+		int dclzLateCnt = session.selectOne("Mypage-Mapper.selectDclzMngtLateCount", empno);
+		return dclzLateCnt;
+	}
+
+	@Override
+	public int selectDclzMngtAbsentCount(int empno) throws SQLException {
+		int dclzAbsentCnt = session.selectOne("Mypage-Mapper.selectDclzMngtAbsentCount", empno);
+		return dclzAbsentCnt;
+	}
+
+	@Override
+	public int selectDclzMngtEarlieCkOutCount(int empno) throws SQLException {
+		int dclzECkOutCnt = session.selectOne("Mypage-Mapper.selectDclzMngtEarlieCkOutCount", empno);
+		return dclzECkOutCnt;
+	}
+
+	@Override
+	public int selectDclzMngtMissingCount(int empno) throws SQLException {
+		int dclzMissingCnt = session.selectOne("Mypage-Mapper.selectDclzMngtMissingCount", empno);
+		return dclzMissingCnt;
+	}
+
+}
